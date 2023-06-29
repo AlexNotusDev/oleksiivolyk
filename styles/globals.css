@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html, body {
+        @apply h-full
+    }
+
+    body {
+        @apply container h-full mx-auto xl:max-w-5xl 2xl:max-w-5xl
+    }
+
+    h1 {
+        @apply text-2xl;
+    }
+    h2 {
+        @apply text-xl;
+    }
+    h3 {
+        @apply text-lg;
+    }
+
+    p:empty:before {
+        content: ' ';
+        white-space: pre;
+    }
+}
+
+.editorWrap {
+    height: 90%;
+    margin-bottom: 30px;
+}
+
+.editor {
+    background-color: white;
+    height: 98% !important;
+    overflow: scroll;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 0.375rem;
+    box-shadow: 0 3px 3px 2px rgb(0 0 0 / 0.07);
+    z-index: -1 !important;
+}
+
+.toolbar {
+    border-radius: 0.375rem !important;
+    margin-bottom: 10px !important;
+    box-shadow: 0 3px 3px 2px rgb(0 0 0 / 0.07);
+    min-height: 80px;
+}
