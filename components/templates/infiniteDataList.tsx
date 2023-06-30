@@ -3,7 +3,7 @@
 import useInfiniteQuery from '@/hooks/useInfiniteQuery';
 import { LegacyRef, useEffect, useRef } from 'react';
 import debounce from 'lodash/debounce';
-import useIsInViewport from '@/utils/isInViewport';
+import useIsInViewport from '@/hooks/useIsInViewport';
 
 export default function InfiniteDataList({ queryKey, ItemComponent }) {
   const { data, error, fetchNextPage, isFetchingInitialData, isHasNextPage } = useInfiniteQuery(queryKey, 4);
