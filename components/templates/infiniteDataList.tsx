@@ -45,7 +45,11 @@ export default function InfiniteDataList({ queryKey, ItemComponent }) {
           {...item}
         />
       ))}
-      {isHasNextPage ? <div ref={visibleElement as LegacyRef<any>}></div> : 'No more data'}
+      {isHasNextPage ? (
+        <div ref={visibleElement as LegacyRef<any>}></div>
+      ) : (
+        <div className='text-center'>{"That's all\n"}</div>
+      )}
     </div>
   );
 }

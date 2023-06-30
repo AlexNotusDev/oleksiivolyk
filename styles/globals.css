@@ -4,11 +4,11 @@
 
 @layer base {
     html, body {
-        @apply h-full
+        @apply h-screen w-screen m-0 p-0 bg-gray-200
     }
 
     body {
-        @apply container h-full mx-auto xl:max-w-5xl 2xl:max-w-5xl
+        @apply container mx-auto xl:max-w-5xl 2xl:max-w-5xl
     }
 
     h1 {
@@ -48,4 +48,11 @@
     margin-bottom: 10px !important;
     box-shadow: 0 3px 3px 2px rgb(0 0 0 / 0.07);
     min-height: 80px;
+}
+
+.textBoxWithEllipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }

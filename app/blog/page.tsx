@@ -21,7 +21,7 @@ export default async function Blog() {
   const user: null | User = await getCurrentUser();
 
   return (
-    <div className='flex flex-row h-full'>
+    <div className='flex flex-row h-full '>
       <div className='w-[17.5%]'>
         <InputSearch inputEvent={searchInputHandler} />
         <Switcher
@@ -37,7 +37,7 @@ export default async function Blog() {
           />
         )}
       </div>
-      <div className='w-[82.5%] flex flex-col items-center pl-4'>
+      <div className='w-[82.5%] flex flex-col items-center'>
         <InfiniteDataList
           ItemComponent={BlogListItem}
           queryKey={`${process.env.apiUrl}/blog`}

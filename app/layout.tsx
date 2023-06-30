@@ -7,15 +7,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const currentUser = await getCurrentUser();
 
   return (
-    <html
-      lang='en'
-      className='bg-gray-200'
-    >
-      <body>
-        <div className='h-[14%] py-4'>
+    <html lang='en'>
+      <body className='h-screen'>
+        <div className='h-34 py-4 sticky'>
           <Header currentUser={currentUser} />
         </div>
-        <div className='h-[86%]'>{children}</div>
+        <div className='h-[calc(100%-10rem)]'>{children}</div>
       </body>
     </html>
   );
