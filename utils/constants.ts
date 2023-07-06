@@ -5,3 +5,9 @@ export enum UserRole {
   USER = 'user',
   ADMIN = 'admin',
 }
+
+export enum BlogCategory {
+  TECH = 'tech',
+  LIFE = 'life',
+  ALL = 'all',
+}

@@ -1,18 +1,20 @@
-import React from 'react';
 import Header from '@/components/organisms/header';
 import '@/styles/globals.css';
 import { getCurrentUser } from '@/сlients/userClient';
+import ProviderComponent from '@/utils/userProvideComponent';
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const currentUser = await getCurrentUser();
+  const user = await getCurrentUser();
 
   return (
     <html lang='en'>
       <body className='h-screen'>
-        <div className='h-34 py-4 sticky'>
-          <Header currentUser={currentUser} />
-        </div>
-        <div className='h-[calc(100%-10rem)]'>{children}</div>
+        <ProviderComponent value={user}>
+          <div className='h-34 py-4 sticky'>
+            <Header />
+          </div>
+          <div className='h-[calc(100%-10rem)]'>{children}</div>
+        </ProviderComponent>
       </body>
     </html>
   );

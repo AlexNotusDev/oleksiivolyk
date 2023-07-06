@@ -6,11 +6,14 @@ import HeaderNavigation from '@/components/molekules/headerNavigation';
 import { useRouter } from 'next/navigation';
 import ButtonOutlined from '@/components/atoms/buttonOutlined';
 import { signIn, signOut } from 'next-auth/react';
+import { useContext } from 'react';
+import { UserContext } from '@/utils/userProvideComponent';
 
 export const headerNavButtons: HeaderNavButton[] = [{ name: 'BLOG', route: '/blog' }];
 
-export default function Header({ currentUser }) {
+export default function Header() {
   const router = useRouter();
+  const user = useContext(UserContext);
 
   function routeToHome() {
     router.push('/');
@@ -47,9 +50,9 @@ export default function Header({ currentUser }) {
         <div className='h-full w-fit flex flex-row'>
           <HeaderNavigation buttons={headerNavButtons} />
           <div className='h-full w-28 flex justify-center items-center'>
-            {currentUser ? (
+            {user ? (
               <ButtonOutlined
-                imageUrl={currentUser.image}
+                imageUrl={user.image}
                 text='Sign out'
                 clickEvent={handleSignOut}
               />

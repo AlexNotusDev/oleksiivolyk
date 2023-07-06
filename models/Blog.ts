@@ -1,4 +1,4 @@
-import { BlogCategory } from '@/enums/BlogCategory';
+import { BlogCategory } from '@/utils/constants';
 
 export interface Blog {
   id: string;

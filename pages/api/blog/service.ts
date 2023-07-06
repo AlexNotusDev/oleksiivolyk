@@ -4,10 +4,12 @@ import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import set from 'lodash/set';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { BlogFindManyArgs } from '.prisma/client';
+import { BlogCategory } from '@/utils/constants';
 
 class BlogApiService {
-  private s3Client: S3Client;
-  private bucket: string;
+  private readonly s3Client: S3Client;
+  private readonly bucket: string;
+  private findManyArgs: BlogFindManyArgs;
 
   constructor() {
     this.s3Client = new S3Client({
@@ -18,6 +20,7 @@ class BlogApiService {
       region: process.env.awsRegion,
     });
     this.bucket = process.env.awsBucketName;
+    this.findManyArgs = this.addOrderAndSelectArgs();
   }
 
   async createNewBlog(body) {
@@ -26,25 +29,50 @@ class BlogApiService {
     });
   }
 
-  async getBlogs(query) {
-    let { limit, page } = query;
-
-    let requestArgs: BlogFindManyArgs = {
+  addOrderAndSelectArgs() {
+    return {
       orderBy: [{ createdAt: 'desc' }, { category: 'desc' }],
       select: { id: true, img: true, title: true, description: true, category: true, createdAt: true },
     };
+  }
 
+  async getBlogs(query) {
+    this.addPaginationArgs(query).addFilterArgs(query);
+
+    const blogs = await prisma?.blog.findMany(this.findManyArgs);
+
+    this.findManyArgs = this.addOrderAndSelectArgs();
+
+    return blogs;
+  }
+
+  addPaginationArgs({ limit, page }) {
     if (page && limit) {
       limit = +limit;
       page = +page;
       if (page > 0) {
-        requestArgs = { ...requestArgs, skip: page * limit, take: limit };
+        this.findManyArgs = { ...this.findManyArgs, skip: page * limit, take: limit };
       } else {
-        requestArgs = { ...requestArgs, take: limit };
+        this.findManyArgs = { ...this.findManyArgs, take: limit };
       }
     }
 
-    return prisma?.blog.findMany(requestArgs);
+    return this;
+  }
+
+  addFilterArgs({ category, searchInput }) {
+    const filters = {};
+    if (category == BlogCategory.LIFE || category == BlogCategory.TECH) {
+      filters['category'] = category;
+    }
+
+    if (searchInput) {
+      filters['OR'] = [{ title: { contains: searchInput } }, { description: { contains: searchInput } }];
+    }
+
+    this.findManyArgs = { ...this.findManyArgs, where: filters };
+
+    return this;
   }
 
   async getBlogById(id: string) {
@@ -53,9 +81,7 @@ class BlogApiService {
       select: { title: true, body: true, createdAt: true },
     });
 
-    const blogWithActualSrcUrls = await this.prepareLinksForImages(blog);
-
-    return blogWithActualSrcUrls;
+    return this.prepareLinksForImages(blog);
   }
 
   async prepareLinksForImages(blog) {

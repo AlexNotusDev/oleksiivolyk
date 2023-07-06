@@ -3,9 +3,8 @@
 import { useCallback, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
 
-export default function Switcher({ left, right, mid = '', switchEvent }) {
-  let midClasses =
-    'h-full w-10 bg-white cursor-pointer hover:bg-gray-100  text-gray-200';
+export default function Switcher({ left, right, mid, switchEvent }) {
+  let midClasses = 'h-full w-10 bg-white cursor-pointer hover:bg-gray-100  text-gray-200';
 
   const similarLabelCss =
     'bg-white inline-flex items-center justify-center peer-checked:bg-gray-100 peer-checked: h-full w-full cursor-pointer hover:bg-gray-100';

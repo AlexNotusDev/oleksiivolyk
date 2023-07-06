@@ -1,32 +1,35 @@
+'use client';
+
 import InputSearch from '@/components/atoms/InputSearch';
 import Switcher from '@/components/atoms/switcher';
-import { getCurrentUser } from '@/сlients/userClient';
-import { User } from '@prisma/client';
 import { ButtonForRedirect } from '@/components/atoms/buttonForRedirect';
-import { UserRole } from '@/utils/constants';
+import { BlogCategory, UserRole } from '@/utils/constants';
 import InfiniteDataList from '@/components/templates/infiniteDataList';
 import BlogListItem from '@/components/molekules/blogListItem';
+import { useContext, useState } from 'react';
+import { UserContext } from '@/utils/userProvideComponent';
+import queryCompose from '@/utils/queryCompose';
 
-async function categorySwitcher(value: string | undefined) {
-  'use server';
-  console.log(value);
-}
+export default function Blog() {
+  const [blogQuery, setBlogQuery] = useState({});
+  const user = useContext(UserContext);
 
-async function searchInputHandler(value) {
-  'use server';
-  console.log(value);
-}
+  function categorySwitcher(value: string | null): void {
+    setBlogQuery({ ...blogQuery, category: value });
+  }
 
-export default async function Blog() {
-  const user: null | User = await getCurrentUser();
+  function searchInputHandler(value: string): void {
+    setBlogQuery({ ...blogQuery, searchInput: value });
+  }
 
   return (
     <div className='flex flex-row h-full '>
       <div className='w-[17.5%]'>
         <InputSearch inputEvent={searchInputHandler} />
         <Switcher
-          left='tech'
-          right='life'
+          left={BlogCategory.TECH}
+          right={BlogCategory.LIFE}
+          mid={BlogCategory.ALL}
           switchEvent={categorySwitcher}
         />
         {user?.role === UserRole.ADMIN && (
@@ -40,7 +43,7 @@ export default async function Blog() {
       <div className='w-[82.5%] flex flex-col items-center'>
         <InfiniteDataList
           ItemComponent={BlogListItem}
-          queryKey={`${process.env.apiUrl}/blog`}
+          queryKey={`${process.env.apiUrl}/blog?${queryCompose(blogQuery)}`}
         />
       </div>
     </div>

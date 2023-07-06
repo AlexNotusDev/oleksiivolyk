@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint . --ext .ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.341.0",
@@ -44,6 +44,8 @@
     "@types/dateformat": "^5.0.0",
     "@types/dropzone": "^5.7.4",
     "@types/react-draft-wysiwyg": "^1.13.4",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
     "prettier": "2.8.8",
     "prisma": "^4.13.0"
   }
