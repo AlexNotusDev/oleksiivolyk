@@ -1,22 +1,22 @@
 'use client';
 
-import { useState } from 'react';
-import BlogHeaderForm from '@/components/molekules/blogAddNewForm';
-import BlogBodyEditor from '@/components/atoms/editorWysiwyg';
-import {
-  DeleteObjectCommand,
-  GetObjectCommand,
-  PutObjectCommand,
-  PutObjectCommandInput,
-  S3Client,
-} from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { convertToRaw } from 'draft-js';
+import React, { useState } from 'react';
 import { getAllImagesFromROW, replaceImgLinkWithKey } from '@/utils/getImageUrls';
 import { useRouter } from 'next/navigation';
 import blogClient from '@/сlients/blogClient';
 import getUUID from '@/utils/uuid';
 import { NEW_BLOG_BODY_LS_KEY, NEW_BLOG_HEADER_LS_KEY } from '@/utils/constants';
+import dynamic from 'next/dynamic';
+import S3Client from '@/сlients/S3Client';
+import s3Client from '@/сlients/S3Client';
+
+const DBlogBodyEditor = dynamic(() => import('@/components/atoms/editorWysiwyg'), {
+  ssr: false,
+});
+
+const DBlogHeaderForm = dynamic(() => import('@/components/molekules/blogAddNewForm'), {
+  ssr: false,
+});
 
 type ImageShort = {
   key: string;
@@ -27,16 +27,6 @@ enum ADDING_BLOG_STAGE {
   HEADER = 'HEADER',
   BODY = 'BODY',
 }
-
-const bucket = process.env.awsBucketName;
-
-const s3Client = new S3Client({
-  credentials: {
-    accessKeyId: process.env.awsAccessKey,
-    secretAccessKey: process.env.awsSecretAccessKey,
-  },
-  region: process.env.awsRegion,
-});
 
 export default function NewBlogInterface() {
   const [addingBlogStage, setAddingBlogStage] = useState<ADDING_BLOG_STAGE>(ADDING_BLOG_STAGE.HEADER);
@@ -60,79 +50,58 @@ export default function NewBlogInterface() {
   async function imageUploadHandler(file: File) {
     const id = await getUUID();
     const key = `${file.name}_${id}`;
-    const params = {
-      Bucket: bucket,
-      Key: key,
-      Body: await file.arrayBuffer(),
-      ContentType: file.type,
-    };
 
-    const putCommand = new PutObjectCommand(params as PutObjectCommandInput);
-    try {
-      await s3Client.send(putCommand);
-    } catch (e) {
-      console.log('ERROR', e);
-    }
+    await s3Client.uploadS3Image(key, await file.arrayBuffer(), file.type);
 
-    const getObjectParams = {
-      Bucket: bucket,
-      Key: key,
-    };
-
-    const getCommand = new GetObjectCommand(getObjectParams);
-    const url = await getSignedUrl(s3Client, getCommand);
+    const url = await s3Client.getS3ImageUrl(key);
 
     setAddedImages((prevState) => prevState.concat({ url, key }));
 
     return { data: { link: url } };
   }
 
-  async function saveBlogEventHandler(editorState) {
-    let ROWEditorState = convertToRaw(editorState.getCurrentContent());
-    const actualBlogImages = getAllImagesFromROW(ROWEditorState);
+  async function saveBlogEventHandler(RawEditorState) {
+    const updatedBlogRaw = await handleS3Images(RawEditorState);
 
-    for (const { key, url } of addedImages) {
-      if (!actualBlogImages.includes(url)) {
-        const deleteParams = {
-          Bucket: bucket,
-          Key: key,
-        };
-
-        const deleteCommand = new DeleteObjectCommand(deleteParams);
-
-        try {
-          await s3Client.send(deleteCommand);
-        } catch (e) {
-          console.log(`ERROR for ${key}`, e);
-        }
-      } else {
-        ROWEditorState = replaceImgLinkWithKey(url, key, ROWEditorState);
-      }
-    }
-
-    const newBlog = { ...blogHeaderValues, body: JSON.stringify(ROWEditorState) };
+    const newBlog = { ...blogHeaderValues, body: JSON.stringify(updatedBlogRaw) };
 
     try {
       await blogClient.createBlog(newBlog);
+
       localStorage.removeItem(NEW_BLOG_HEADER_LS_KEY);
       localStorage.removeItem(NEW_BLOG_BODY_LS_KEY);
+
       router.push('/blog');
     } catch (e) {
       console.log(e);
     }
   }
 
+  async function handleS3Images(RAWEditorState) {
+    const actualBlogImages = getAllImagesFromROW(RAWEditorState);
+
+    for (const { key, url } of addedImages) {
+      if (!actualBlogImages.includes(url)) {
+        await S3Client.removeS3Image(key);
+      } else {
+        RAWEditorState = replaceImgLinkWithKey(url, key, RAWEditorState);
+      }
+    }
+
+    return RAWEditorState;
+  }
+
   switch (addingBlogStage) {
     case ADDING_BLOG_STAGE.HEADER:
       return (
-        <BlogHeaderForm
+        <DBlogHeaderForm
           cancelEvent={cancelHandler}
           submitEvent={submitHandler}
         />
       );
     case ADDING_BLOG_STAGE.BODY:
       return (
-        <BlogBodyEditor
+        <DBlogBodyEditor
           uploadImageEvent={imageUploadHandler}
           saveBlogEvent={saveBlogEventHandler}
           getBackEvent={getBackHandler}

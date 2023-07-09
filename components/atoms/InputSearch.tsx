@@ -2,8 +2,8 @@
 
 import debounce from 'lodash/debounce';
 
-export default function InputSearch({ inputEvent }) {
-  const debouncedInput = debounce(inputEvent, 1000);
+export default function InputSearch({ inputEvent, debounceMS = 1000 }) {
+  const debouncedInput = debounce(inputEvent, debounceMS);
   function handleInput(e) {
     debouncedInput(e.target.value);
   }

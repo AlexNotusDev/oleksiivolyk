@@ -1,12 +1,16 @@
 import axios from 'axios';
 
+const REVALIDATE_INTERVAL = 3600;
+
 class BlogClient {
   async createBlog(body) {
     await axios.post(`${process.env.apiUrl}/blog`, body);
   }
 
   async getBlogById(id: string) {
-    const res = await fetch(`${process.env.apiUrl}/blog?id=${id}`, { next: { revalidate: 3600 } } as RequestInit);
+    const res = await fetch(`${process.env.apiUrl}/blog?id=${id}`, {
+      next: { revalidate: REVALIDATE_INTERVAL },
+    } as RequestInit);
     // Recommendation: handle errors
     if (!res.ok) {
       // This will activate the closest `error.js` Error Boundary

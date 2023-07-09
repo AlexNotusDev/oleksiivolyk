@@ -2,8 +2,7 @@
 
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-
-import prisma from '@/libs/prismadb';
+import prisma from '@/сlients/prismadbClient';
 import { User } from '.prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { UserRole } from '@/utils/constants';

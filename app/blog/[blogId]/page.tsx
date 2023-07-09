@@ -4,7 +4,7 @@ import blogClient from '@/сlients/blogClient';
 import draftToHtml from 'draftjs-to-html';
 import Date from '@/components/atoms/date';
 
-export default async function Post({ params }: { params: { blogId: string } }) {
+export default async function Blog({ params }: { params: { blogId: string } }) {
   const { blogId } = params;
   const res = await blogClient.getBlogById(blogId);
   const { body, title, createdAt } = res;

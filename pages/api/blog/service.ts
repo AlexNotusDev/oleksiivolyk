@@ -1,25 +1,14 @@
 'use server';
 
-import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import set from 'lodash/set';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { BlogFindManyArgs } from '.prisma/client';
-import { BlogCategory } from '@/utils/constants';
+import { AWS_URL_LINK_EXPIRE_TIME, BlogCategory } from '@/utils/constants';
+import s3Client from '@/сlients/S3Client';
 
 class BlogApiService {
-  private readonly s3Client: S3Client;
-  private readonly bucket: string;
   private findManyArgs: BlogFindManyArgs;
 
   constructor() {
-    this.s3Client = new S3Client({
-      credentials: {
-        accessKeyId: process.env.awsAccessKey,
-        secretAccessKey: process.env.awsSecretAccessKey,
-      },
-      region: process.env.awsRegion,
-    });
-    this.bucket = process.env.awsBucketName;
     this.findManyArgs = this.addOrderAndSelectArgs();
   }
 
@@ -91,13 +80,9 @@ class BlogApiService {
     const newEntityMap = await Promise.all(
       Object.values(parsedBody.entityMap).map(async (imgObject) => {
         if (imgObject?.type === 'IMAGE') {
-          const getObjectParams = {
-            Bucket: this.bucket,
-            Key: imgObject?.data?.src,
-          };
+          const key = imgObject?.data?.src;
 
-          const getCommand = new GetObjectCommand(getObjectParams);
-          const url = await getSignedUrl(this.s3Client, getCommand, { expiresIn: 3600 });
+          const url = await s3Client.getS3ImageUrl(key, AWS_URL_LINK_EXPIRE_TIME);
           return set(imgObject, 'data.src', url);
         } else {
           return imgObject;

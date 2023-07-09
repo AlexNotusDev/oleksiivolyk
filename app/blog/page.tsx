@@ -9,10 +9,11 @@ import BlogListItem from '@/components/molekules/blogListItem';
 import { useContext, useState } from 'react';
 import { UserContext } from '@/utils/userProvideComponent';
 import queryCompose from '@/utils/queryCompose';
+import { User } from '@prisma/client';
 
-export default function Blog() {
+export default function Blogs() {
   const [blogQuery, setBlogQuery] = useState({});
-  const user = useContext(UserContext);
+  const user = useContext<User>(UserContext);
 
   function categorySwitcher(value: string | null): void {
     setBlogQuery({ ...blogQuery, category: value });

@@ -6,35 +6,20 @@ import { convertToRaw, EditorState, convertFromRaw } from 'draft-js';
 
 import { useEffect, useState } from 'react';
 import Button from '@/components/atoms/button';
-import {
-  NEW_BLOG_BODY_LS_KEY,
-  NEW_BLOG_HEADER_LS_KEY,
-} from '@/utils/constants';
+import { NEW_BLOG_BODY_LS_KEY, NEW_BLOG_HEADER_LS_KEY } from '@/utils/constants';
 
-const Editor = dynamic(
-  () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
-  { ssr: false },
-);
+const Editor = dynamic(() => import('react-draft-wysiwyg').then((mod) => mod.Editor), { ssr: false });
 
-export default function BlogBodyEditor({
-  uploadImageEvent,
-  saveBlogEvent,
-  cancelEvent,
-  getBackEvent,
-}) {
+export default function BlogBodyEditor({ uploadImageEvent, saveBlogEvent, cancelEvent, getBackEvent }) {
   const [needSaveEditorState, setNeedSaveEditorState] = useState<boolean>(true);
 
   let savedEditorSate;
-  let state = localStorage.getItem(NEW_BLOG_BODY_LS_KEY);
+  const state = localStorage.getItem(NEW_BLOG_BODY_LS_KEY);
   if (state) {
-    savedEditorSate = EditorState.createWithContent(
-      convertFromRaw(JSON.parse(state)),
-    );
+    savedEditorSate = EditorState.createWithContent(convertFromRaw(JSON.parse(state)));
   }
 
-  const [editorState, setEditorState] = useState<EditorState>(
-    savedEditorSate || EditorState.createEmpty(),
-  );
+  const [editorState, setEditorState] = useState<EditorState>(savedEditorSate || EditorState.createEmpty());
 
   useEffect(() => {
     return () => {
@@ -54,7 +39,7 @@ export default function BlogBodyEditor({
 
   function saveBlog() {
     setNeedSaveEditorState(false);
-    saveBlogEvent(editorState);
+    saveBlogEvent(convertToRaw(editorState.getCurrentContent()));
   }
 
   function cancelHandler() {

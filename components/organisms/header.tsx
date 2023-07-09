@@ -8,12 +8,13 @@ import ButtonOutlined from '@/components/atoms/buttonOutlined';
 import { signIn, signOut } from 'next-auth/react';
 import { useContext } from 'react';
 import { UserContext } from '@/utils/userProvideComponent';
+import { User } from '@prisma/client';
 
 export const headerNavButtons: HeaderNavButton[] = [{ name: 'BLOG', route: '/blog' }];
 
 export default function Header() {
   const router = useRouter();
-  const user = useContext(UserContext);
+  const user = useContext<User>(UserContext);
 
   function routeToHome() {
     router.push('/');

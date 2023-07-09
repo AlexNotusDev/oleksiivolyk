@@ -7,10 +7,7 @@ import TextArea from '@/components/atoms/textArea';
 import Dropzone from '@/components/atoms/imgDropzone';
 import ButtonOutlined from '@/components/atoms/buttonOutlined';
 import { useEffect, useState } from 'react';
-import {
-  NEW_BLOG_BODY_LS_KEY,
-  NEW_BLOG_HEADER_LS_KEY,
-} from '@/utils/constants';
+import { NEW_BLOG_BODY_LS_KEY, NEW_BLOG_HEADER_LS_KEY } from '@/utils/constants';
 
 const schema = Yup.object().shape({
   img: Yup.string().required(),
@@ -20,8 +17,7 @@ const schema = Yup.object().shape({
 });
 
 export default function BlogHeaderForm({ cancelEvent, submitEvent }) {
-  const [invalidSubmitAttempt, setInvalidSubmitAttempt] =
-    useState<boolean>(false);
+  const [invalidSubmitAttempt, setInvalidSubmitAttempt] = useState<boolean>(false);
   const [isSaveState, setIsSaveState] = useState<boolean>(true);
 
   const storedValues = localStorage.getItem(NEW_BLOG_HEADER_LS_KEY);
@@ -40,15 +36,7 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }) {
     },
   });
 
-  const {
-    dirty,
-    values,
-    handleChange,
-    handleSubmit,
-    validateForm,
-    isValid,
-    setFieldValue,
-  } = formik;
+  const { dirty, values, handleChange, handleSubmit, validateForm, isValid, setFieldValue } = formik;
 
   useEffect(() => {
     if (isValid && dirty) {
@@ -81,7 +69,6 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }) {
   }
 
   function handleImageChange(image) {
-    console.log('image', image);
     setFieldValue('img', image);
   }
 
@@ -132,15 +119,9 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }) {
             </div>
           </div>
           <div className='w-full flex flex-row justify-between'>
-            <p
-              className={`text-red-700 ${
-                !invalidSubmitAttempt && 'invisible'
-              } font-light`}
-            >
-              Please feel all.
-            </p>
+            <p className={`text-red-700 ${!invalidSubmitAttempt && 'invisible'} font-light`}>Please feel all.</p>
 
-            <div className=' flex flex-row space-x-2'>
+            <div className='flex flex-row space-x-2'>
               <>
                 <ButtonOutlined
                   text='Next'

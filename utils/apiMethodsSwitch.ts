@@ -8,7 +8,7 @@ export interface Controller {
   remove?: (req: NextApiRequest, res: NextApiResponse) => Promise<any | void>;
 }
 
-export async function apiMethodsSwitch<Options>(req: NextApiRequest, res: NextApiResponse, controller: Controller) {
+export async function apiMethodsSwitch(req: NextApiRequest, res: NextApiResponse, controller: Controller) {
   const { method } = req;
   const { get, post, patch, remove } = controller;
   switch (method) {
