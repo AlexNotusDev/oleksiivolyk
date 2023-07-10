@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { HeaderNavButton } from '@/models/HeaderNavButton';
-import HeaderNavigation from '@/components/molekules/headerNavigation';
+import HeaderNavigation from '@/components/molecules/headerNavigation';
 import { useRouter } from 'next/navigation';
 import ButtonOutlined from '@/components/atoms/buttonOutlined';
 import { signIn, signOut } from 'next-auth/react';

@@ -14,7 +14,7 @@ const DBlogBodyEditor = dynamic(() => import('@/components/atoms/editorWysiwyg')
   ssr: false,
 });
 
-const DBlogHeaderForm = dynamic(() => import('@/components/molekules/blogAddNewForm'), {
+const DBlogHeaderForm = dynamic(() => import('@/components/molecules/blogAddNewForm'), {
   ssr: false,
 });
 

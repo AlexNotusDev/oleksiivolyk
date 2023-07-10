@@ -5,7 +5,7 @@ import Switcher from '@/components/atoms/switcher';
 import { ButtonForRedirect } from '@/components/atoms/buttonForRedirect';
 import { BlogCategory, UserRole } from '@/utils/constants';
 import InfiniteDataList from '@/components/templates/infiniteDataList';
-import BlogListItem from '@/components/molekules/blogListItem';
+import BlogListItem from '@/components/molecules/blogListItem';
 import { useContext, useState } from 'react';
 import { UserContext } from '@/utils/userProvideComponent';
 import queryCompose from '@/utils/queryCompose';
