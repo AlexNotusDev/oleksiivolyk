@@ -5,7 +5,9 @@ import { LegacyRef, useEffect, useRef } from 'react';
 import debounce from 'lodash/debounce';
 import useIsInViewport from '@/hooks/useIsInViewport';
 
-export default function InfiniteDataList({ queryKey, ItemComponent }) {
+const FETCH_NEXT_PAGE_DEBOUNCE = 500;
+
+export default function InfiniteDataList({ queryKey, ItemComponent }: { queryKey: string; ItemComponent: any }) {
   const { data, error, fetchNextPage, isFetchingInitialData, isHasNextPage } = useInfiniteQuery(queryKey, 4);
 
   const scrollList = useRef<HTMLDivElement>();
@@ -16,7 +18,7 @@ export default function InfiniteDataList({ queryKey, ItemComponent }) {
     if (isInViewPort) {
       fetchNextPage();
     }
-  }, 500);
+  }, FETCH_NEXT_PAGE_DEBOUNCE);
 
   useEffect(() => {
     if (scrollList && scrollList.current && isHasNextPage) {

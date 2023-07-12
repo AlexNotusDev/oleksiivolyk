@@ -2,9 +2,9 @@
 
 import debounce from 'lodash/debounce';
 
-export default function InputSearch({ inputEvent, debounceMS = 1000 }) {
+export default function InputSearch({ inputEvent, debounceMS = 1000 }: InputSearchProps) {
   const debouncedInput = debounce(inputEvent, debounceMS);
-  function handleInput(e) {
+  function handleInput(e: any) {
     debouncedInput(e.target.value);
   }
 
@@ -28,6 +28,11 @@ export default function InputSearch({ inputEvent, debounceMS = 1000 }) {
         sm:text-sm
         sm:leading-6
         '
-    ></input>
+    />
   );
 }
+
+type InputSearchProps = {
+  inputEvent: (value: string) => void;
+  debounceMS?: number;
+};

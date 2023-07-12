@@ -3,6 +3,7 @@ import blogApiService from '@/pages/api/blog/service';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { authGuard } from '@/сlients/userClient';
 import { StatusCodes } from 'http-status-codes';
+import { serializeError } from 'serialize-error';
 
 class BlogController implements Controller {
   async post(req: NextApiRequest, res: NextApiResponse) {
@@ -13,7 +14,7 @@ class BlogController implements Controller {
       await blogApiService.createNewBlog(body);
       res.status(StatusCodes.CREATED).send('Success');
     } catch (e) {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).end(e);
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).end(serializeError(e));
     }
   }
 
@@ -29,7 +30,7 @@ class BlogController implements Controller {
         res.status(StatusCodes.OK).send(blog);
       }
     } catch (e) {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).end(e);
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).end(serializeError(e));
     }
   }
 }

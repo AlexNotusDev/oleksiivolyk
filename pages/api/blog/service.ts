@@ -1,41 +1,52 @@
 'use server';
 
 import set from 'lodash/set';
-import { BlogFindManyArgs } from '.prisma/client';
 import { AWS_URL_LINK_EXPIRE_TIME, BlogCategory } from '@/utils/constants';
 import s3Client from '@/сlients/S3Client';
+import { Blog, Prisma } from '@prisma/client';
+
+import { RawDraftContentState } from 'draft-js';
+import prismaClient from '@/сlients/prismadbClient';
+
+type BlogShort = Pick<Blog, 'title' | 'body' | 'createdAt'>;
+
+type QueryParams = {
+  limit?: number;
+  page?: number;
+  category?: string;
+  searchInput?: string;
+};
 
 class BlogApiService {
-  private findManyArgs: BlogFindManyArgs;
+  private findManyArgs: Prisma.BlogFindManyArgs = {};
+  private dbClient = prismaClient;
 
   constructor() {
-    this.findManyArgs = this.addOrderAndSelectArgs();
+    this.addOrderAndSelectArgs();
   }
 
-  async createNewBlog(body) {
-    await prisma?.blog.create({
+  async createNewBlog(body: Blog) {
+    await this.dbClient?.blog.create({
       data: body,
     });
   }
 
   addOrderAndSelectArgs() {
-    return {
+    this.findManyArgs = {
       orderBy: [{ createdAt: 'desc' }, { category: 'desc' }],
       select: { id: true, img: true, title: true, description: true, category: true, createdAt: true },
     };
+
+    return this;
   }
 
-  async getBlogs(query) {
-    this.addPaginationArgs(query).addFilterArgs(query);
+  async getBlogs(query: QueryParams) {
+    this.addOrderAndSelectArgs().addPaginationArgs(query).addFilterArgs(query);
 
-    const blogs = await prisma?.blog.findMany(this.findManyArgs);
-
-    this.findManyArgs = this.addOrderAndSelectArgs();
-
-    return blogs;
+    return this.dbClient?.blog.findMany(this.findManyArgs);
   }
 
-  addPaginationArgs({ limit, page }) {
+  addPaginationArgs({ limit, page }: Pick<QueryParams, 'limit' | 'page'>) {
     if (page && limit) {
       limit = +limit;
       page = +page;
@@ -49,9 +60,9 @@ class BlogApiService {
     return this;
   }
 
-  addFilterArgs({ category, searchInput }) {
-    const filters = {};
-    if (category == BlogCategory.LIFE || category == BlogCategory.TECH) {
+  addFilterArgs({ category, searchInput }: Pick<QueryParams, 'category' | 'searchInput'>) {
+    const filters: Prisma.BlogWhereInput = {};
+    if (category !== BlogCategory.ALL) {
       filters['category'] = category;
     }
 
@@ -64,18 +75,22 @@ class BlogApiService {
     return this;
   }
 
-  async getBlogById(id: string) {
-    const blog = await prisma?.blog.findUnique({
+  async getBlogById(id: string): Promise<BlogShort | null> {
+    const blog: BlogShort | null | undefined = await this.dbClient?.blog.findUnique({
       where: { id },
       select: { title: true, body: true, createdAt: true },
     });
 
-    return this.prepareLinksForImages(blog);
+    if (blog) {
+      return this.prepareLinksForImages(blog);
+    } else {
+      return null;
+    }
   }
 
-  async prepareLinksForImages(blog) {
+  async prepareLinksForImages(blog: BlogShort): Promise<BlogShort> {
     const { body } = blog;
-    const parsedBody = JSON.parse(body);
+    const parsedBody: RawDraftContentState = JSON.parse(body);
 
     const newEntityMap = await Promise.all(
       Object.values(parsedBody.entityMap).map(async (imgObject) => {

@@ -2,8 +2,8 @@ import useSWRInfinite from 'swr/infinite';
 import { fetcher } from '@/utils/fetcher';
 import isEmpty from 'lodash/isEmpty';
 
-export default function UseInfiniteQuery(queryKey, limit) {
-  const getKey = (pageIndex, previousPageData) => {
+export default function UseInfiniteQuery(queryKey: string, limit: number) {
+  const getKey = (pageIndex: number, previousPageData: any) => {
     if (previousPageData && !previousPageData.length) return null;
 
     const search = queryKey.includes('?');

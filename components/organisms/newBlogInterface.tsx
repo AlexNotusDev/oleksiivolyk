@@ -7,8 +7,9 @@ import blogClient from '@/сlients/blogClient';
 import getUUID from '@/utils/uuid';
 import { NEW_BLOG_BODY_LS_KEY, NEW_BLOG_HEADER_LS_KEY } from '@/utils/constants';
 import dynamic from 'next/dynamic';
-import S3Client from '@/сlients/S3Client';
 import s3Client from '@/сlients/S3Client';
+import { RawDraftContentState } from 'draft-js';
+import { Blog } from '@prisma/client';
 
 const DBlogBodyEditor = dynamic(() => import('@/components/atoms/editorWysiwyg'), {
   ssr: false,
@@ -28,17 +29,20 @@ enum ADDING_BLOG_STAGE {
   BODY = 'BODY',
 }
 
+export type BlogHeader = Pick<Blog, 'img' | 'title' | 'description' | 'category'>;
+export type BlogPartial = Partial<Blog>;
+
 export default function NewBlogInterface() {
   const [addingBlogStage, setAddingBlogStage] = useState<ADDING_BLOG_STAGE>(ADDING_BLOG_STAGE.HEADER);
   const [addedImages, setAddedImages] = useState<ImageShort[]>([]);
-  const [blogHeaderValues, setBlogHeaderValues] = useState(null);
+  const [blogHeaderValues, setBlogHeaderValues] = useState<BlogPartial | null>(null);
   const router = useRouter();
 
   function cancelHandler() {
     router.push('/blog');
   }
 
-  function submitHandler(values) {
+  function submitHandler(values: BlogHeader) {
     setBlogHeaderValues(values);
     setAddingBlogStage(ADDING_BLOG_STAGE.BODY);
   }
@@ -60,10 +64,10 @@ export default function NewBlogInterface() {
     return { data: { link: url } };
   }
 
-  async function saveBlogEventHandler(RawEditorState) {
+  async function saveBlogEventHandler(RawEditorState: RawDraftContentState) {
     const updatedBlogRaw = await handleS3Images(RawEditorState);
 
-    const newBlog = { ...blogHeaderValues, body: JSON.stringify(updatedBlogRaw) };
+    const newBlog: BlogPartial = { ...blogHeaderValues, body: JSON.stringify(updatedBlogRaw) };
 
     try {
       await blogClient.createBlog(newBlog);
@@ -77,12 +81,12 @@ export default function NewBlogInterface() {
     }
   }
 
-  async function handleS3Images(RAWEditorState) {
+  async function handleS3Images(RAWEditorState: RawDraftContentState) {
     const actualBlogImages = getAllImagesFromROW(RAWEditorState);
 
     for (const { key, url } of addedImages) {
       if (!actualBlogImages.includes(url)) {
-        await S3Client.removeS3Image(key);
+        await s3Client.removeS3Image(key);
       } else {
         RAWEditorState = replaceImgLinkWithKey(url, key, RAWEditorState);
       }

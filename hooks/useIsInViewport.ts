@@ -15,7 +15,7 @@ export default function useIsInViewport<Element extends HTMLElement>(
       setIsVisible(false);
       return;
     }
-    let top;
+    let top = 0;
     if (currentElement.current) {
       top = currentElement.current.getBoundingClientRect().top;
     }

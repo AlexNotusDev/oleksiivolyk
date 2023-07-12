@@ -3,8 +3,9 @@
 import Date from '@/components/atoms/date';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { Blog } from '@prisma/client';
 
-export default function BlogListItem({ id, img, title, description, createdAt }) {
+export default function BlogListItem({ id, img, title, description, createdAt }: Blog) {
   const router = useRouter();
 
   function handleClick() {

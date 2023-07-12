@@ -8,6 +8,7 @@ import Dropzone from '@/components/atoms/imgDropzone';
 import ButtonOutlined from '@/components/atoms/buttonOutlined';
 import { useEffect, useState } from 'react';
 import { NEW_BLOG_BODY_LS_KEY, NEW_BLOG_HEADER_LS_KEY } from '@/utils/constants';
+import { BlogHeader } from '@/components/organisms/newBlogInterface';
 
 const schema = Yup.object().shape({
   img: Yup.string().required(),
@@ -16,7 +17,7 @@ const schema = Yup.object().shape({
   category: Yup.string().oneOf(['life', 'tech']).required(),
 });
 
-export default function BlogHeaderForm({ cancelEvent, submitEvent }) {
+export default function BlogHeaderForm({ cancelEvent, submitEvent }: BlogHeaderForm) {
   const [invalidSubmitAttempt, setInvalidSubmitAttempt] = useState<boolean>(false);
   const [isSaveState, setIsSaveState] = useState<boolean>(true);
 
@@ -53,7 +54,7 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }) {
     };
   }, [isValid, dirty, isSaveState, values]);
 
-  function handleSubmitClick(e) {
+  function handleSubmitClick(e: any) {
     validateForm().then(() => {
       if (!isValid || (!dirty && !storedValues)) {
         setInvalidSubmitAttempt(true);
@@ -68,7 +69,7 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }) {
     cancelEvent();
   }
 
-  function handleImageChange(image) {
+  function handleImageChange(image: string) {
     setFieldValue('img', image);
   }
 
@@ -140,3 +141,8 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }) {
     </div>
   );
 }
+
+type BlogHeaderForm = {
+  cancelEvent: () => void;
+  submitEvent: (values: BlogHeader) => void;
+};

@@ -1,7 +1,8 @@
 import set from 'lodash/set';
+import { RawDraftContentState, RawDraftEntity } from 'draft-js';
 
-export function getAllImagesFromROW(row): string[] {
-  return Object.values(row.entityMap).map((imgObject) => {
+export function getAllImagesFromROW(raw: RawDraftContentState): string[] {
+  return Object.values(raw.entityMap).map((imgObject) => {
     if (imgObject.type === 'IMAGE') {
       const imageSrc = imgObject?.data?.src;
       if (!imageSrc) {
@@ -12,15 +13,16 @@ export function getAllImagesFromROW(row): string[] {
   });
 }
 
-export function replaceImgLinkWithKey(url, key, raw) {
+export function replaceImgLinkWithKey(url: string, key: string, raw: RawDraftContentState): RawDraftContentState {
+  const updatedEntityMap: { [key: string]: RawDraftEntity } = {};
+
+  for (const [key, value] of Object.entries(raw.entityMap)) {
+    const isHasImageWithUrl = value?.type === 'IMAGE' && value?.data?.src === url;
+    updatedEntityMap[key] = isHasImageWithUrl ? set(value, 'data.src', key) : value;
+  }
+
   return {
     ...raw,
-    entityMap: Object.values(raw.entityMap).map((imgObject) => {
-      if (imgObject?.type === 'IMAGE' && imgObject?.data?.src === url) {
-        return set(imgObject, 'data.src', key);
-      } else {
-        return imgObject;
-      }
-    }),
+    entityMap: updatedEntityMap,
   };
 }

@@ -1,9 +1,10 @@
 import axios from 'axios';
+import { BlogPartial } from '@/components/organisms/newBlogInterface';
 
 const REVALIDATE_INTERVAL = 3600;
 
 class BlogClient {
-  async createBlog(body) {
+  async createBlog(body: BlogPartial) {
     await axios.post(`${process.env.apiUrl}/blog`, body);
   }
 

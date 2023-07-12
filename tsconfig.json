@@ -21,7 +21,6 @@
     "noFallthroughCasesInSwitch": true,
     "inlineSourceMap": true,
     "inlineSources": true,
-    "experimentalDecorators": true,
     "strictPropertyInitialization": true,
     "baseUrl": ".",
     "allowJs": true,

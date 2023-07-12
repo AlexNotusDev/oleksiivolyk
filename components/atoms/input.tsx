@@ -2,7 +2,7 @@
 
 import { twMerge } from 'tailwind-merge';
 
-export default function Input({ placeholder, value, changeEvent, id, disabled, styles = '' }) {
+export default function Input({ placeholder, value, changeEvent, id, disabled, styles = '' }: InputProps) {
   const updStyles = twMerge('bg-white border-1 border-gray-500 rounded-md px-2 w-full', styles);
 
   return (
@@ -17,3 +17,12 @@ export default function Input({ placeholder, value, changeEvent, id, disabled, s
     />
   );
 }
+
+type InputProps = {
+  placeholder: string;
+  value: string;
+  changeEvent: (e: any) => void;
+  id: string;
+  disabled?: boolean;
+  styles?: string;
+};

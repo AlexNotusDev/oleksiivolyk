@@ -1,6 +1,6 @@
 'use server';
 
-import { getServerSession } from 'next-auth';
+import { getServerSession, Session } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import prisma from '@/сlients/prismadbClient';
 import { User } from '.prisma/client';
@@ -8,7 +8,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { UserRole } from '@/utils/constants';
 import { StatusCodes } from 'http-status-codes';
 
-export async function getSession(req, res) {
+export async function getSession(req?: NextApiRequest, res?: NextApiResponse): Promise<Session | null> {
   if (req && res) {
     return getServerSession(req, res, authOptions as any);
   }
@@ -17,7 +17,7 @@ export async function getSession(req, res) {
 
 export async function getCurrentUser(req?: NextApiRequest, res?: NextApiResponse): Promise<User | null> {
   try {
-    const session = await getSession(req, res);
+    const session: Session | null = await getSession(req, res);
     const email = session?.user?.email;
 
     if (!email) {

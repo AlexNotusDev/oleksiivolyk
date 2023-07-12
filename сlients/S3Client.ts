@@ -8,18 +8,21 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 class S3ApiClient {
+  private readonly bucket: string;
+  private readonly s3Client: S3Client;
+
   constructor() {
-    this.bucket = process.env.awsBucketName;
+    this.bucket = process.env.awsBucketName || '';
     this.s3Client = new S3Client({
       credentials: {
-        accessKeyId: process.env.awsAccessKey,
-        secretAccessKey: process.env.awsSecretAccessKey,
+        accessKeyId: process.env.awsAccessKey || '',
+        secretAccessKey: process.env.awsSecretAccessKey || '',
       },
-      region: process.env.awsRegion,
+      region: process.env.awsRegion || '',
     });
   }
 
-  async removeS3Image(key) {
+  async removeS3Image(key: string): Promise<void> {
     const deleteParams = {
       Bucket: this.bucket,
       Key: key,
@@ -34,17 +37,17 @@ class S3ApiClient {
     }
   }
 
-  async getS3ImageUrl(key, expiresIn = 600) {
+  async getS3ImageUrl(key: string, expiresIn = 600): Promise<string> {
     const getObjectParams = {
       Bucket: this.bucket,
       Key: key,
     };
 
     const getCommand = new GetObjectCommand(getObjectParams);
-    return getSignedUrl(this.s3Client, getCommand, expiresIn);
+    return getSignedUrl(this.s3Client as any, getCommand as any, { expiresIn });
   }
 
-  async uploadS3Image(key, body, contentType) {
+  async uploadS3Image(key: string, body: any, contentType: string): Promise<void> {
     const params = {
       Bucket: this.bucket,
       Key: key,

@@ -13,7 +13,7 @@ import { User } from '@prisma/client';
 
 export default function Blogs() {
   const [blogQuery, setBlogQuery] = useState({});
-  const user = useContext<User>(UserContext);
+  const user = useContext<User | null>(UserContext);
 
   function categorySwitcher(value: string | null): void {
     setBlogQuery({ ...blogQuery, category: value });

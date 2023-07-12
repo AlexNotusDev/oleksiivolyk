@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { convertToRaw, EditorState, convertFromRaw } from 'draft-js';
+import { convertFromRaw, convertToRaw, EditorState, RawDraftContentState } from 'draft-js';
 
 import { useEffect, useState } from 'react';
 import Button from '@/components/atoms/button';
@@ -10,7 +10,12 @@ import { NEW_BLOG_BODY_LS_KEY, NEW_BLOG_HEADER_LS_KEY } from '@/utils/constants'
 
 const Editor = dynamic(() => import('react-draft-wysiwyg').then((mod) => mod.Editor), { ssr: false });
 
-export default function BlogBodyEditor({ uploadImageEvent, saveBlogEvent, cancelEvent, getBackEvent }) {
+export default function BlogBodyEditor({
+  uploadImageEvent,
+  saveBlogEvent,
+  cancelEvent,
+  getBackEvent,
+}: BlogBodyEditorProps) {
   const [needSaveEditorState, setNeedSaveEditorState] = useState<boolean>(true);
 
   let savedEditorSate;
@@ -33,11 +38,11 @@ export default function BlogBodyEditor({ uploadImageEvent, saveBlogEvent, cancel
     };
   });
 
-  function onEditorStateChange(editorState) {
+  function onEditorStateChange(editorState: any) {
     setEditorState(editorState);
   }
 
-  function saveBlog() {
+  function saveBlog(): void {
     setNeedSaveEditorState(false);
     saveBlogEvent(convertToRaw(editorState.getCurrentContent()));
   }
@@ -47,11 +52,11 @@ export default function BlogBodyEditor({ uploadImageEvent, saveBlogEvent, cancel
     cancelEvent();
   }
 
-  async function uploadImageCallBack(file) {
+  async function uploadImageCallBack(file: File): Promise<ImageLink | void> {
     try {
       return await uploadImageEvent(file);
     } catch (e) {
-      console.log('ERROR', e);
+      console.log('ERROR:', e);
     }
   }
 
@@ -94,3 +99,12 @@ export default function BlogBodyEditor({ uploadImageEvent, saveBlogEvent, cancel
     />
   );
 }
+
+type BlogBodyEditorProps = {
+  uploadImageEvent: (file: File) => Promise<ImageLink>;
+  saveBlogEvent: (raw: any) => void;
+  cancelEvent: () => void;
+  getBackEvent: () => void;
+};
+
+type ImageLink = { data: { link: string } };

@@ -1,9 +1,4 @@
-export default function ButtonNavigation({
-  name,
-  redirectAction,
-  redirectUrl,
-  activeRoute,
-}) {
+export default function ButtonNavigation({ name, redirectAction, redirectUrl, activeRoute }: ButtonNavigationProps) {
   function redirect() {
     redirectAction(redirectUrl);
   }
@@ -19,3 +14,10 @@ export default function ButtonNavigation({
     </div>
   );
 }
+
+type ButtonNavigationProps = {
+  name: string;
+  redirectAction: (url: string) => void;
+  redirectUrl: string;
+  activeRoute: string;
+};

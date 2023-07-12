@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
 
-export default function Switcher({ left, right, mid, switchEvent }) {
+export default function Switcher({ left, right, mid, switchEvent }: SwitcherProps) {
   const midClasses = 'h-full w-10 bg-white cursor-pointer hover:bg-gray-100  text-gray-200';
 
   const similarLabelCss =
@@ -12,7 +12,7 @@ export default function Switcher({ left, right, mid, switchEvent }) {
   const [selected, setSelected] = useState(mid);
 
   const switchCallback = useCallback(
-    (value) => {
+    (value: string) => {
       switchEvent(value);
     },
     [switchEvent],
@@ -22,7 +22,7 @@ export default function Switcher({ left, right, mid, switchEvent }) {
     return debounce(switchCallback, 500);
   }, [switchCallback]);
 
-  function change(e) {
+  function change(e: any) {
     const switchValue = e.target.value;
     setSelected(switchValue);
     debouncedSendRequest(switchValue);
@@ -86,3 +86,10 @@ export default function Switcher({ left, right, mid, switchEvent }) {
     </div>
   );
 }
+
+type SwitcherProps = {
+  left: string;
+  right: string;
+  mid: string;
+  switchEvent: (value: string) => void;
+};

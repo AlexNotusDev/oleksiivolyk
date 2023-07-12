@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-export default function ButtonOutlined({ text, clickEvent, isDisabled, imageUrl, styles }) {
+export default function ButtonOutlined({ text, clickEvent, isDisabled, imageUrl, styles }: ButtonOutlinedProps) {
   return (
     <button
       className={`h-8 w-24 rounded-lg border-1 border-gray-500 cursor-pointer flex flex-row justify-around items-center 
@@ -21,3 +21,11 @@ export default function ButtonOutlined({ text, clickEvent, isDisabled, imageUrl,
     </button>
   );
 }
+
+type ButtonOutlinedProps = {
+  text: string;
+  clickEvent: (e: any) => void;
+  isDisabled?: boolean;
+  imageUrl?: string;
+  styles?: string;
+};

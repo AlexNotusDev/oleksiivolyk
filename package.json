@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ext .ts"
+    "lint": "tsc --noEmit && eslint . --ext .ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.341.0",
@@ -34,6 +34,7 @@
     "react-draft-wysiwyg": "^1.15.0",
     "react-dropzone": "^14.2.3",
     "react-image-file-resizer": "^0.4.8",
+    "serialize-error": "^11.0.0",
     "swr": "^2.1.5",
     "tailwind-merge": "^1.13.0",
     "tailwindcss": "3.3.1",
@@ -43,6 +44,7 @@
   "devDependencies": {
     "@types/dateformat": "^5.0.0",
     "@types/dropzone": "^5.7.4",
+    "@types/lodash": "^4.14.195",
     "@types/react-draft-wysiwyg": "^1.13.4",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",

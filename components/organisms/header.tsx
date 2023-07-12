@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { HeaderNavButton } from '@/models/HeaderNavButton';
 import HeaderNavigation from '@/components/molecules/headerNavigation';
 import { useRouter } from 'next/navigation';
 import ButtonOutlined from '@/components/atoms/buttonOutlined';
@@ -10,11 +9,13 @@ import { useContext } from 'react';
 import { UserContext } from '@/utils/userProvideComponent';
 import { User } from '@prisma/client';
 
-export const headerNavButtons: HeaderNavButton[] = [{ name: 'BLOG', route: '/blog' }];
+export type HeaderButtons = { name: string; route: string };
+
+export const headerNavButtons: HeaderButtons[] = [{ name: 'BLOG', route: '/blog' }];
 
 export default function Header() {
   const router = useRouter();
-  const user = useContext<User>(UserContext);
+  const user = useContext<User | null>(UserContext);
 
   function routeToHome() {
     router.push('/');
