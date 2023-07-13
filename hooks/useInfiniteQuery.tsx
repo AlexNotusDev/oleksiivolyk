@@ -18,8 +18,8 @@ export default function UseInfiniteQuery(queryKey: string, limit: number) {
 
   const flattenPages = data?.flatMap((page) => page) ?? [];
   const isFetchingInitialData = !data && !error;
-  const isFetchingNextPage = isFetchingInitialData || (size > 0 && data && typeof data[size - 1] === 'undefined');
   const isHasNextPage = data && !isEmpty(data[size - 1]) && [...data[size - 1]].length == limit;
+  const isFetchingNextPage = size > 0 && data && typeof data[size - 1] === 'undefined';
 
   return {
     data: flattenPages,

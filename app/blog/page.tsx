@@ -45,8 +45,11 @@ export default function Blogs() {
         <InfiniteDataList
           ItemComponent={BlogListItem}
           queryKey={`${process.env.apiUrl}/blog?${queryCompose(blogQuery)}`}
+          limit={LIST_ITEMS_LIMIT}
         />
       </div>
     </div>
   );
 }
+
+const LIST_ITEMS_LIMIT = 4;
