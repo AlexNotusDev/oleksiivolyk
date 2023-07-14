@@ -11,7 +11,7 @@ import { User } from '@prisma/client';
 
 export type HeaderButtons = { name: string; route: string };
 
-export const headerNavButtons: HeaderButtons[] = [{ name: 'BLOG', route: '/blog' }];
+const headerNavButtons: HeaderButtons[] = [{ name: 'BLOG', route: '/blog' }];
 
 export default function Header() {
   const router = useRouter();
@@ -32,9 +32,9 @@ export default function Header() {
   return (
     <div className='flex items-center w-full '>
       <div
-        className='bg-white flex-none h-16 rounded-md w-16 drop-shadow-lg cursor-pointer '
+        className='bg-white flex-none h-16 rounded-md w-16 drop-shadow-lg cursor-pointer flex justify-center'
         onClick={routeToHome}
-      ></div>
+      />
       <div className='border-8 flex-none border-white rounded-md mx-4 drop-shadow-lg'>
         <Image
           src='/HeaderPhoto.png'

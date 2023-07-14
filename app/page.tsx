@@ -1,32 +1,87 @@
-import { Metadata } from 'next';
 import '@/styles/globals.css';
+import Checkbox from '@/components/atoms/checkbox';
 
 export default function Home() {
   return (
-    <div className='w-full bg-white h-full rounded-md drop-shadow-lg p-6 overflow-scroll text-start '>
-      <p className='text-2xl text-center'>Welcome !!!</p>
-      <br />
-      As a full-stack software developer i decided to make my own site from scratch using experience which i gained
-      during my career. <br /> <br />
-      <p className='text-xl  text-center'>GOALS</p> <br />
-      <ol className='list-decimal list-inside'>
-        <li>Simplify employers or customers get to know more about me, and my experience.</li>
-        <li>Share with world my life and work stories.</li>
-        <li>Playground for developing my skills</li>
-      </ol>
-      <br />
-      <p className='text-xl text-center '>TECH STACK</p> <br />
-      Next.js, TypeScript, PostgreSQL, AWS <br /> <br />
-      <p className='text-xl text-center'>FEATURES</p> <br />
-      <ul className='list-inside list-disc'>
-        <li>PROFILE - Wou can read about me, my soft and hard skills.</li>
-        <li>BLOG - I going to post stories from my life, and tech articles.</li>
-        <li>
-          FEEDBACK - You can look in feedbacks wat people leaved for me, and leave your feedback too if have something
-          (authorisation required)
-        </li>
-        <li>QUIZZES - Quiz builder, for refresh knowledge</li>
-      </ul>
+    <div className='w-full h-fulloverflow-scroll space-y-4'>
+      <div className='bg-white py-2 px-4 rounded-md drop-shadow-lg '>
+        Hi &#9996;, welcome on my personal site, currently it's in progress, features list with statuses below.&#128071;
+        <br /> If you have any questions, please feel free to write me on{' '}
+        <span className='font-medium'> alexnotusdev@gmail.com </span> or in{' '}
+        <a
+          className='text-blue-700'
+          href='https://www.linkedin.com/in/astronotus/'
+        >
+          LinkedIn
+        </a>
+      </div>
+      {features.map(({ subFeatures, title }) => (
+        <Feature
+          key={title}
+          title={title}
+          subFeatures={subFeatures}
+        />
+      ))}
     </div>
   );
 }
+
+const features: Feature[] = [
+  { title: 'Authorisation', subFeatures: [{ title: 'Google OAuth authorisation', isAccomplished: true }] },
+  {
+    title: 'Blog',
+    subFeatures: [
+      { title: 'Create blog page, with wysiwyg editor, accessible only for admin', isAccomplished: true },
+      { title: 'Blogs list, with infinity scroll', isAccomplished: true },
+      { title: 'Filter by category', isAccomplished: true },
+      { title: 'Filter by input', isAccomplished: true },
+      { title: 'Authorised user can subscribe on blog category, and receive updates on email', isAccomplished: false },
+      { title: 'Blog tags', isAccomplished: false },
+    ],
+  },
+  {
+    title: 'Skills tree',
+    subFeatures: [
+      { title: 'Admin can create, and edit skills tree', isAccomplished: false },
+      { title: 'Admin can add quiz for each skill', isAccomplished: false },
+      {
+        title: 'User can go through skills tree, authorised user can pass quiz and receive score',
+        isAccomplished: false,
+      },
+    ],
+  },
+  {
+    title: 'Chat widget',
+    subFeatures: [{ title: 'User can chat with me in working time, and ask any question', isAccomplished: false }],
+  },
+];
+
+function Feature({ title, subFeatures }: Feature) {
+  return (
+    <div className='flex flex-col space-y-2 bg-white py-2 px-4 rounded-md drop-shadow-lg '>
+      <h2>{title}</h2>
+      <hr />
+      {subFeatures.map(({ title, isAccomplished }: SubFeature) => {
+        return (
+          <div
+            className='flex flex-row'
+            key={title}
+          >
+            <Checkbox checked={isAccomplished} />
+            {title}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+type Feature = {
+  title: string;
+  subFeatures: SubFeature[];
+};
+
+type SubFeature = {
+  isAccomplished: boolean;
+  title: string;
+};

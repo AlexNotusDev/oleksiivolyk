@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
+import Image from 'next/image';
 
 export default function Switcher({ left, right, mid, switchEvent }: SwitcherProps) {
   const midClasses = 'h-full w-10 bg-white cursor-pointer hover:bg-gray-100  text-gray-200';
@@ -60,10 +61,12 @@ export default function Switcher({ left, right, mid, switchEvent }: SwitcherProp
           htmlFor='mid'
           className={`${similarLabelCss} p-1`}
         >
-          <img
+          <Image
+            width={22}
+            height={22}
             src='/icons/all_inclusive_FILL0_wght400_GRAD0_opsz48.svg'
             alt='icon'
-          ></img>
+          />
         </label>
       </div>
 
