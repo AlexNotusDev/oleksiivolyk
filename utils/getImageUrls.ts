@@ -2,15 +2,15 @@ import set from 'lodash/set';
 import { RawDraftContentState, RawDraftEntity } from 'draft-js';
 
 export function getAllImagesFromROW(raw: RawDraftContentState): string[] {
-  return Object.values(raw.entityMap).map((imgObject) => {
-    if (imgObject.type === 'IMAGE') {
+  return Object.values(raw.entityMap)
+    .filter((imgObject) => imgObject.type === 'IMAGE')
+    .map((imgObject) => {
       const imageSrc = imgObject?.data?.src;
       if (!imageSrc) {
         console.log('ERROR: imageSrc is undefined');
       }
       return imgObject?.data?.src;
-    }
-  });
+    });
 }
 
 export function replaceImgLinkWithKey(url: string, key: string, raw: RawDraftContentState): RawDraftContentState {

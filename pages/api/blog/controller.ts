@@ -33,6 +33,19 @@ class BlogController implements Controller {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).end(serializeError(e));
     }
   }
+
+  async remove(req: NextApiRequest, res: NextApiResponse) {
+    const { query } = req;
+
+    try {
+      if (query.id) {
+        await blogApiService.deleteBlog(query.id as string);
+        res.status(StatusCodes.OK).send('Success');
+      }
+    } catch (e) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).end(serializeError(e));
+    }
+  }
 }
 
 const blogController = new BlogController();

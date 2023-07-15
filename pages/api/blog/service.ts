@@ -7,6 +7,7 @@ import { Blog, Prisma } from '@prisma/client';
 
 import { RawDraftContentState } from 'draft-js';
 import prismaClient from '@/сlients/prismadbClient';
+import { getAllImagesFromROW } from '@/utils/getImageUrls';
 
 type BlogShort = Pick<Blog, 'title' | 'body' | 'createdAt'>;
 
@@ -25,13 +26,51 @@ class BlogApiService {
     this.addOrderAndSelectArgs();
   }
 
-  async createNewBlog(body: Blog) {
+  public async createNewBlog(body: Blog) {
     await this.dbClient?.blog.create({
       data: body,
     });
   }
 
-  addOrderAndSelectArgs() {
+  public async getBlogs(query: QueryParams) {
+    this.addOrderAndSelectArgs().addPaginationArgs(query).addFilterArgs(query);
+
+    return this.dbClient?.blog.findMany(this.findManyArgs);
+  }
+
+  public async getBlogById(id: string): Promise<BlogShort | null> {
+    const blog: BlogShort | null | undefined = await this.dbClient?.blog.findUnique({
+      where: { id },
+      select: { title: true, body: true, createdAt: true },
+    });
+
+    if (blog) {
+      return this.prepareLinksForImages(blog);
+    } else {
+      return null;
+    }
+  }
+
+  public async deleteBlog(id: string): Promise<void> {
+    const blog: { body: string } | null | undefined = await this.dbClient?.blog.findUnique({
+      where: { id },
+      select: { body: true },
+    });
+
+    const parsedBody = JSON.parse(blog?.body);
+
+    const imagesKeys = getAllImagesFromROW(parsedBody);
+
+    if (imagesKeys.length) {
+      await this.deleteBlogImages(imagesKeys);
+    }
+
+    await this.dbClient?.blog.delete({
+      where: { id },
+    });
+  }
+
+  private addOrderAndSelectArgs() {
     this.findManyArgs = {
       orderBy: [{ createdAt: 'desc' }, { category: 'desc' }],
       select: { id: true, img: true, title: true, description: true, category: true, createdAt: true },
@@ -40,13 +79,7 @@ class BlogApiService {
     return this;
   }
 
-  async getBlogs(query: QueryParams) {
-    this.addOrderAndSelectArgs().addPaginationArgs(query).addFilterArgs(query);
-
-    return this.dbClient?.blog.findMany(this.findManyArgs);
-  }
-
-  addPaginationArgs({ limit, page }: Pick<QueryParams, 'limit' | 'page'>) {
+  private addPaginationArgs({ limit, page }: Pick<QueryParams, 'limit' | 'page'>) {
     if (page && limit) {
       limit = +limit;
       page = +page;
@@ -60,7 +93,7 @@ class BlogApiService {
     return this;
   }
 
-  addFilterArgs({ category, searchInput }: Pick<QueryParams, 'category' | 'searchInput'>) {
+  private addFilterArgs({ category, searchInput }: Pick<QueryParams, 'category' | 'searchInput'>) {
     const filters: Prisma.BlogWhereInput = {};
     if (category !== BlogCategory.ALL) {
       filters['category'] = category;
@@ -75,20 +108,7 @@ class BlogApiService {
     return this;
   }
 
-  async getBlogById(id: string): Promise<BlogShort | null> {
-    const blog: BlogShort | null | undefined = await this.dbClient?.blog.findUnique({
-      where: { id },
-      select: { title: true, body: true, createdAt: true },
-    });
-
-    if (blog) {
-      return this.prepareLinksForImages(blog);
-    } else {
-      return null;
-    }
-  }
-
-  async prepareLinksForImages(blog: BlogShort): Promise<BlogShort> {
+  private async prepareLinksForImages(blog: BlogShort): Promise<BlogShort> {
     const { body } = blog;
     const parsedBody: RawDraftContentState = JSON.parse(body);
 
@@ -106,6 +126,14 @@ class BlogApiService {
     );
 
     return set(blog, 'body', { ...parsedBody, entityMap: newEntityMap });
+  }
+
+  private async deleteBlogImages(imagesKeys: string[]) {
+    await Promise.all(
+      imagesKeys.map(async (key) => {
+        await s3Client.removeS3Image(key);
+      }),
+    );
   }
 }
 

@@ -20,6 +20,10 @@ class BlogClient {
 
     return res.json();
   }
+
+  async deleteBlog(id: string) {
+    await axios.delete(`${process.env.apiUrl}/blog?id=${id}`);
+  }
 }
 
 const blogClient = new BlogClient();
