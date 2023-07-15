@@ -35,6 +35,7 @@ class BlogController implements Controller {
   }
 
   async remove(req: NextApiRequest, res: NextApiResponse) {
+    await authGuard(req, res, true);
     const { query } = req;
 
     try {
