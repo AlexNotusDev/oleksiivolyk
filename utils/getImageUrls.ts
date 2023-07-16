@@ -16,9 +16,9 @@ export function getAllImagesFromROW(raw: RawDraftContentState): string[] {
 export function replaceImgLinkWithKey(url: string, key: string, raw: RawDraftContentState): RawDraftContentState {
   const updatedEntityMap: { [key: string]: RawDraftEntity } = {};
 
-  for (const [key, value] of Object.entries(raw.entityMap)) {
+  for (const [mapKey, value] of Object.entries(raw.entityMap)) {
     const isHasImageWithUrl = value?.type === 'IMAGE' && value?.data?.src === url;
-    updatedEntityMap[key] = isHasImageWithUrl ? set(value, 'data.src', key) : value;
+    updatedEntityMap[mapKey] = isHasImageWithUrl ? set(value, 'data.src', key) : value;
   }
 
   return {
