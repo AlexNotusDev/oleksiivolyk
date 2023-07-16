@@ -37,7 +37,9 @@ export default function InfiniteDataList({ queryKey, ItemComponent, limit }: Inf
       >
         {isHasNextPage && LOADING_TEXT}
       </div>
-      {!isHasNextPage && !isFetchingNextPage && <div className='text-center'>{"That's all"}</div>}
+      {!isHasNextPage && !isFetchingNextPage && data.length >= limit && (
+        <div className='text-center'>{"That's all"}</div>
+      )}
     </div>
   );
 }

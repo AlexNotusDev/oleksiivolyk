@@ -1,6 +1,6 @@
 export default function Checkbox({ checked }) {
   return (
-    <div class='flex items-center mr-2'>
+    <div className='flex items-center mr-2'>
       <input
         checked={checked}
         disabled
