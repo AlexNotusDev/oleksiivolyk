@@ -57,17 +57,19 @@ class BlogApiService {
       select: { body: true },
     });
 
-    const parsedBody = JSON.parse(blog?.body);
+    if (blog) {
+      const parsedBody = JSON.parse(blog?.body);
 
-    const imagesKeys = getAllImagesFromROW(parsedBody);
+      const imagesKeys = getAllImagesFromROW(parsedBody);
 
-    if (imagesKeys.length) {
-      await this.deleteBlogImages(imagesKeys);
+      if (imagesKeys.length) {
+        await this.deleteBlogImages(imagesKeys);
+      }
+
+      await this.dbClient?.blog.delete({
+        where: { id },
+      });
     }
-
-    await this.dbClient?.blog.delete({
-      where: { id },
-    });
   }
 
   private addOrderAndSelectArgs() {

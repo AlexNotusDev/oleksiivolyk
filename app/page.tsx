@@ -5,7 +5,8 @@ export default function Home() {
   return (
     <div className='w-full h-fulloverflow-scroll space-y-4'>
       <div className='bg-white py-2 px-4 rounded-md drop-shadow-lg '>
-        Hi &#9996;, welcome on my personal site, currently it's in progress, features list with statuses below.&#128071;
+        Hi &#9996;, welcome on my personal site, currently it&apos;s in progress, features list with statuses
+        below.&#128071;
         <br /> If you have any questions, please feel free to write me on{' '}
         <span className='font-medium'> alexnotusdev@gmail.com </span> or in{' '}
         <a
