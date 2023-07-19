@@ -10,6 +10,14 @@
       "StackName": "amplify-oleksiivolyk-dev-164945",
       "StackId": "arn:aws:cloudformation:eu-north-1:821075710034:stack/amplify-oleksiivolyk-dev-164945/f4d81c80-2571-11ee-ad87-06d5ff0e6c6c",
       "AmplifyAppId": "d3v5dlgwwmhc4r"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d3v5dlgwwmhc4r",
+          "type": "cicd"
+        }
+      }
     }
   }
 }
