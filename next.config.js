@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  target: 'experimental-serverless-trace',
   env: {
     apiUrl: process.env.HOST + '/api',
     awsRegion: process.env.REGION_AWS,
