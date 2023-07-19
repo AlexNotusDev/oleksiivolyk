@@ -1,12 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  target: 'experimental-serverless-trace',
   env: {
     apiUrl: process.env.HOST + '/api',
-    awsRegion: process.env.AWS_REGION,
-    awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    awsAccessKey: process.env.AWS_ACCESS_KEY,
-    awsBucketName: process.env.AWS_BUCKET_NAME,
+    awsRegion: process.env.REGION_AWS,
+    awsSecretAccessKey: process.env.SECRET_ACCESS_KEY_AWS,
+    awsAccessKey: process.env.ACCESS_KEY_AWS,
+    awsBucketName: process.env.BUCKET_NAME_AWS,
   },
   experimental: {
     serverActions: true,
