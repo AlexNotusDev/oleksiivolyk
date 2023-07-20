@@ -23,18 +23,6 @@ export default function Blogs() {
     setBlogQuery({ ...blogQuery, searchInput: value });
   }
 
-  console.log(
-    'ENV VARS CHECK:',
-    process.env.apiUrl,
-    process.env.awsRegion,
-    process.env.awsSecretAccessKey,
-    process.env.awsAccessKey,
-    process.env.awsBucketName,
-    process.env.nextAuthSecret,
-    process.env.googleClientId,
-    process.env.googleClientSecret,
-  );
-
   return (
     <div className='flex flex-row h-full '>
       <div className='w-[17.5%]'>
