@@ -10,6 +10,7 @@ import { useContext, useState } from 'react';
 import { UserContext } from '@/utils/userProvideComponent';
 import queryCompose from '@/utils/queryCompose';
 import { User } from '@prisma/client';
+import * as process from 'process';
 
 export default function Blogs() {
   const [blogQuery, setBlogQuery] = useState({});
@@ -23,7 +24,7 @@ export default function Blogs() {
     setBlogQuery({ ...blogQuery, searchInput: value });
   }
 
-  console.log('ENV VARS CHECK:', process.env.apiUrl);
+  console.log('ENV VARS CHECK:', process.env.dbUrl, '|', process.env.NEXT_PUBLIC_DATABASE_URL);
 
   return (
     <div className='flex flex-row h-full '>
