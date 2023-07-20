@@ -23,6 +23,8 @@ export default function Blogs() {
     setBlogQuery({ ...blogQuery, searchInput: value });
   }
 
+  console.log('ENV VARS CHECK:', process.env.apiUrl);
+
   return (
     <div className='flex flex-row h-full '>
       <div className='w-[17.5%]'>
