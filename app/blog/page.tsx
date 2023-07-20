@@ -24,8 +24,6 @@ export default function Blogs() {
     setBlogQuery({ ...blogQuery, searchInput: value });
   }
 
-  console.log('ENV VARS CHECK:', process.env.dbUrl, '|', process.env.NEXT_PUBLIC_DATABASE_URL);
-
   return (
     <div className='flex flex-row h-full '>
       <div className='w-[17.5%]'>
