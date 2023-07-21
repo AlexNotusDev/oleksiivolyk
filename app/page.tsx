@@ -2,8 +2,6 @@ import '@/styles/globals.css';
 import Checkbox from '@/components/atoms/checkbox';
 
 export default function Home() {
-  console.log(process.env);
-
   return (
     <div className='w-full h-fulloverflow-scroll space-y-4'>
       <div className='bg-white py-2 px-4 rounded-md drop-shadow-lg '>
