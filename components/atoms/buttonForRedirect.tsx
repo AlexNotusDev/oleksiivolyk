@@ -3,12 +3,6 @@
 import Button from '@/components/atoms/button';
 import { useRouter } from 'next/navigation';
 
-type ButtonForRedirectProps = {
-  text: string;
-  styles: string;
-  redirectUrl: string;
-};
-
 export function ButtonForRedirect({ text, styles, redirectUrl }: ButtonForRedirectProps) {
   const router = useRouter();
 
@@ -24,3 +18,9 @@ export function ButtonForRedirect({ text, styles, redirectUrl }: ButtonForRedire
     />
   );
 }
+
+type ButtonForRedirectProps = {
+  text: string;
+  styles: string;
+  redirectUrl: string;
+};
