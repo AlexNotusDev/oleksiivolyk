@@ -20,8 +20,9 @@ class BlogController implements Controller {
 
   async get(req: NextApiRequest, res: NextApiResponse) {
     console.log('REQUEST', req);
-
     try {
+      const { query } = req;
+
       if (!query.id) {
         const blogs = await blogApiService.getBlogs(query);
         res.status(StatusCodes.OK).send(blogs);
