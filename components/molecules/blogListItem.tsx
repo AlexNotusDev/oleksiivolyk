@@ -9,7 +9,6 @@ export default function BlogListItem({ id, img, title, description, createdAt }:
   const router = useRouter();
 
   function handleClick() {
-    console.log('Redirect to:', id);
     router.push(`/blog/${id}`);
   }
 

@@ -19,7 +19,7 @@ class BlogController implements Controller {
   }
 
   async get(req: NextApiRequest, res: NextApiResponse) {
-    console.log('REQUEST', req);
+    const { query } = req;
 
     try {
       if (!query.id) {
@@ -30,7 +30,7 @@ class BlogController implements Controller {
         res.status(StatusCodes.OK).send(blog);
       }
     } catch (e) {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).end(`Blog.get: ${serializeError(e)}`);
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).end(serializeError(e));
     }
   }
 
