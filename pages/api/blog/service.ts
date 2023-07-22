@@ -39,6 +39,8 @@ class BlogApiService {
   }
 
   public async getBlogById(id: string): Promise<BlogShort | null> {
+    console.log('getBlogById', id);
+
     const blog: BlogShort | null | undefined = await this.dbClient?.blog.findUnique({
       where: { id },
       select: { title: true, body: true, createdAt: true },
