@@ -3,13 +3,16 @@ import { BlogPartial } from '@/components/organisms/newBlogInterface';
 
 const REVALIDATE_INTERVAL = 3600;
 
+const urlForClient = '/api/blog';
+const urlForSSR = `${process.env.apiUrl}/blog`;
+
 class BlogClient {
   async createBlog(body: BlogPartial) {
-    await axios.post(`${process.env.apiUrl}/blog`, body);
+    await axios.post(urlForClient, body);
   }
 
   async getBlogById(id: string) {
-    const res = await fetch(`${process.env.apiUrl}/blog?id=${id}`, {
+    const res = await fetch(`${urlForSSR}?id=${id}`, {
       next: { revalidate: REVALIDATE_INTERVAL },
     } as RequestInit);
     // Recommendation: handle errors
@@ -22,7 +25,7 @@ class BlogClient {
   }
 
   async deleteBlog(id: string) {
-    await axios.delete(`${process.env.apiUrl}/blog?id=${id}`);
+    await axios.delete(`${urlForClient}?id=${id}`);
   }
 }
 
