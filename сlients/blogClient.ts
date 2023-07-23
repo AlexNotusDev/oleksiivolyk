@@ -2,7 +2,6 @@ import axios from 'axios';
 import { BlogPartial } from '@/components/organisms/newBlogInterface';
 
 const REVALIDATE_INTERVAL = 3600;
-
 const urlForClient = '/api/blog';
 const urlForSSR = `${process.env.apiUrl}/blog`;
 
