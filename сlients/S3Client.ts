@@ -48,6 +48,14 @@ class S3ApiClient {
   }
 
   async uploadS3Image(key: string, body: any, contentType: string): Promise<void> {
+    console.log(
+      'aws creds',
+      process.env.awsBucketName,
+      process.env.awsAccessKey,
+      process.env.awsSecretAccessKey,
+      process.env.awsRegion,
+    );
+
     const params = {
       Bucket: this.bucket,
       Key: key,
