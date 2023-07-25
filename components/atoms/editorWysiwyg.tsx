@@ -84,15 +84,15 @@ export default function BlogBodyEditor({
         />,
         <Button
           key='2'
-          text='Cancel'
-          styles='bg-red-600 h-6 w-20 text-white ml-2'
-          clickEvent={cancelHandler}
-        />,
-        <Button
-          key='3'
           text='Back'
           styles='bg-yellow-400 h-6 w-20 text-white ml-2'
           clickEvent={getBackEvent}
+        />,
+        <Button
+          key='3'
+          text='Cancel'
+          styles='bg-red-600 h-6 w-20 text-white ml-2'
+          clickEvent={cancelHandler}
         />,
       ]}
     />
