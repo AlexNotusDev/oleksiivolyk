@@ -60,7 +60,7 @@ export default function Header() {
               />
             ) : (
               <ButtonOutlined
-                imageUrl='/google-logo-9808.png'
+                imageUrl='/google-logo.png'
                 text='Sign in'
                 clickEvent={handleSignIn}
               />

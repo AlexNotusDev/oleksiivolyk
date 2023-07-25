@@ -2,8 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { convertFromRaw, convertToRaw, EditorState, RawDraftContentState } from 'draft-js';
-
+import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 import { useEffect, useState } from 'react';
 import Button from '@/components/atoms/button';
 import { NEW_BLOG_BODY_LS_KEY, NEW_BLOG_HEADER_LS_KEY } from '@/utils/constants';

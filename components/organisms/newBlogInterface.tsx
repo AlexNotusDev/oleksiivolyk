@@ -38,7 +38,11 @@ export default function NewBlogInterface() {
   const [blogHeaderValues, setBlogHeaderValues] = useState<BlogPartial | null>(null);
   const router = useRouter();
 
-  function cancelHandler() {
+  async function cancelHandler() {
+    for (const { key } of addedImages) {
+      await s3Client.removeS3Image(key);
+    }
+
     router.push('/blog');
   }
 
