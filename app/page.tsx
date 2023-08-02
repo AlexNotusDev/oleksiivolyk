@@ -3,8 +3,8 @@ import Checkbox from '@/components/atoms/checkbox';
 
 export default function Home() {
   return (
-    <div className='w-full h-fulloverflow-scroll space-y-4'>
-      <div className='bg-white py-2 px-4 rounded-md drop-shadow-lg '>
+    <>
+      <div className='bg-white py-2 px-4 rounded-md drop-shadow-lg mb-4 mx-2 sm:mx-0'>
         Hi &#9996;, welcome on my personal site, currently it&apos;s in progress, features list with statuses
         below.&#128071;
         <br /> If you have any questions, please feel free to write me on{' '}
@@ -23,7 +23,7 @@ export default function Home() {
           subFeatures={subFeatures}
         />
       ))}
-    </div>
+    </>
   );
 }
 
@@ -59,7 +59,7 @@ const features: Feature[] = [
 
 function Feature({ title, subFeatures }: Feature) {
   return (
-    <div className='flex flex-col space-y-2 bg-white py-2 px-4 rounded-md drop-shadow-lg '>
+    <div className='flex flex-col space-y-2 bg-white py-2 px-4 rounded-md drop-shadow-lg mb-4 mx-2 sm:mx-0'>
       <h2>{title}</h2>
       <hr />
       {subFeatures.map(({ title, isAccomplished }: SubFeature) => {

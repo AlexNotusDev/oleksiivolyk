@@ -2,7 +2,7 @@ export default function Checkbox({ checked = false, disabled = false }: Checkbox
   return (
     <div className='flex items-center mr-2'>
       <input
-        checked={checked}
+        defaultChecked={checked}
         disabled={disabled}
         id='checkbox'
         type='checkbox'

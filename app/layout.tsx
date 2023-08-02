@@ -9,13 +9,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang='en'>
-      <body className='h-screen'>
+      <body className='box-border'>
         <ProviderComponent value={user}>
           <>
-            <div className='h-34 py-4 sticky'>
+            <div className='sticky h-16 sm:top-4 container mx-auto xl:max-w-5xl 2xl:max-w-5xl sm:px-2 z-10'>
               <Header />
             </div>
-            <div className='h-[calc(100%-10rem)]'>{children}</div>
+            <div className='h-[calc(100%-5rem)] sm:h-[calc(100%-7rem)] sm:mt-8 mt-4 container mx-auto xl:max-w-5xl 2xl:max-w-5xl sm:px-2 overflow-scroll'>
+              {children}
+            </div>
           </>
         </ProviderComponent>
       </body>

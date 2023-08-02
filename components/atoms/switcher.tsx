@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce';
 import Image from 'next/image';
 
 export default function Switcher({ left, right, mid, switchEvent }: SwitcherProps) {
-  const midClasses = 'h-full w-10 bg-white cursor-pointer hover:bg-gray-100  text-gray-200';
+  const midClasses = 'h-full w-10 bg-white cursor-pointer hover:bg-gray-100 text-gray-200';
 
   const similarLabelCss =
     'bg-white inline-flex items-center justify-center peer-checked:bg-gray-100 peer-checked: h-full w-full cursor-pointer hover:bg-gray-100';
@@ -30,7 +30,7 @@ export default function Switcher({ left, right, mid, switchEvent }: SwitcherProp
   }
 
   return (
-    <div className='w-full h-8 flex flex-row border-collapse mt-4 drop-shadow-lg divide-x divide-gray-200'>
+    <div className='w-full h-8 flex flex-row border-collapse drop-shadow-lg divide-x divide-gray-200'>
       <div className='inline-block basis-1/2'>
         <input
           onChange={change}

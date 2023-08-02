@@ -1,10 +1,22 @@
 import Image from 'next/image';
+import { twMerge } from 'tailwind-merge';
 
-export default function ButtonOutlined({ text, clickEvent, isDisabled, imageUrl, styles }: ButtonOutlinedProps) {
+export default function ButtonOutlined({
+  text,
+  clickEvent,
+  isDisabled,
+  imageUrl,
+  styles,
+  imgStyles,
+}: ButtonOutlinedProps) {
   return (
     <button
-      className={`h-8 w-24 rounded-lg border-1 border-gray-500 cursor-pointer flex flex-row justify-around items-center 
-      active:scale-100 hover:scale-105 disabled:text-gray-300 disabled:border-gray-300 disabled:pointer-events-none ${styles}`}
+      className={twMerge(
+        'h-8 w-24 rounded-lg border-1 border-gray-500 cursor-pointer flex flex-col justify-around ' +
+          'items-center active:scale-100 hover:scale-105 disabled:text-gray-300 disabled:border-gray-300 ' +
+          'disabled:pointer-events-none',
+        styles,
+      )}
       onClick={clickEvent}
       disabled={isDisabled}
     >
@@ -14,7 +26,7 @@ export default function ButtonOutlined({ text, clickEvent, isDisabled, imageUrl,
           src={imageUrl}
           height={20}
           width={20}
-          className='rounded-md'
+          className={twMerge('rounded-md', imgStyles)}
         />
       )}
       <span>{text}</span>
@@ -28,4 +40,5 @@ type ButtonOutlinedProps = {
   isDisabled?: boolean;
   imageUrl?: string;
   styles?: string;
+  imgStyles?: string;
 };

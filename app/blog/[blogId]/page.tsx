@@ -12,8 +12,8 @@ export default async function Blog({ params }: { params: { blogId: string } }) {
   const htmlConverted = draftToHtml(body);
 
   return (
-    <div className='bg-white p-4 drop-shadow-md rounded-md'>
-      <div className='mb-2'>
+    <div className='bg-white h-full p-4 drop-shadow-md rounded-md overflow-scroll'>
+      <div>
         <div className='flex flex-row justify-between'>
           <h1>{title}</h1>
           <BlogAdminPanel id={blogId} />

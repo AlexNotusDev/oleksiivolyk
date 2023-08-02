@@ -24,7 +24,7 @@ export default function InfiniteDataList({ queryKey, ItemComponent, limit }: Inf
   if (isFetchingInitialData && data?.length === 0) return <div>{LOADING_TEXT}</div>;
 
   return (
-    <div className='h-full w-full overflow-scroll'>
+    <div className='h-full w-full overflow-scroll px-2'>
       {data?.map((item) => (
         <ItemComponent
           key={item.id}

@@ -23,7 +23,7 @@ export default function BlogAdminPanel({ id }: { id: string }) {
   }
 
   return (
-    <div className='flex flex-col justify-center'>
+    <div className='flex flex-col'>
       {user && user.role == UserRole.ADMIN && (
         <Button
           text='Delete'
