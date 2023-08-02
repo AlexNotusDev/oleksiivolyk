@@ -21,7 +21,8 @@ export default function InfiniteDataList({ queryKey, ItemComponent, limit }: Inf
 
   if (error) return <div> Error</div>;
 
-  if (isFetchingInitialData && data?.length === 0) return <div>{LOADING_TEXT}</div>;
+  if (isFetchingInitialData && data?.length === 0)
+    return <div className='w-full flex justify-center'>{LOADING_TEXT}</div>;
 
   return (
     <div className='h-full w-full overflow-scroll px-2'>
