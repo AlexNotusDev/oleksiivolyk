@@ -74,8 +74,8 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }: BlogHeaderF
   }
 
   return (
-    <div className={`w-full bg-white rounded-md mb-4 drop-shadow-md p-4`}>
-      <div className='flex flex-row w-full space-x-4 '>
+    <div className=' bg-white rounded-md mb-4 drop-shadow-md p-4 mx-2'>
+      <div className='flex flex-col sm:flex-row w-full sm:space-x-4 space-y-4 sm:space-y-0'>
         <Dropzone
           imageChangeEvent={handleImageChange}
           image={values.img}

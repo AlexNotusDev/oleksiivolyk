@@ -33,7 +33,7 @@ export default function ImgDropzone({ imageChangeEvent, image }: ImgDropzoneProp
     >
       <input {...getInputProps()} />
       <Image
-        src={image ? image : '/image.svg'}
+        src={image ? image : '/icons/image.svg'}
         alt='image load'
         fill={true}
         style={{ objectFit: 'cover' }}

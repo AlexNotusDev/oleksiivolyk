@@ -8,8 +8,8 @@ import { UserContext } from '@/utils/userProvideComponent';
 import { User } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import ButtonOutlined from '@/components/atoms/buttonOutlined';
 import NavigationMobile from '@/components/organisms/navigationMobile';
+import ButtonWithIcon from '@/components/atoms/buttonWithIcon';
 
 export type HeaderButtons = { name: string; route: string };
 
@@ -65,11 +65,10 @@ export default function Header() {
           </div>
           {isMobile ? (
             <div className='h-full flex items-center mx-2'>
-              <ButtonOutlined
-                text=''
+              <ButtonWithIcon
                 clickEvent={mobileMenuToggle}
-                imageUrl='/menu.svg'
-                styles='h-8 w-8 border-0 '
+                iconUrl={isMobileMenuToggle ? '/icons/close.svg' : '/icons/menu.svg'}
+                styles='h-8 w-8 border-0 filter-none'
                 imgStyles='h-8 w-8'
               />
             </div>
@@ -82,9 +81,7 @@ export default function Header() {
         </div>
         <div className='h-full w-16 flex justify-center items-center border-l-1 border-gray-300'>
           <button
-            className={
-              'h-full w-full rounded-r-md cursor-pointer flex flex-col justify-center items-center hover:bg-gray-100 text-sm'
-            }
+            className='h-full w-full rounded-r-md cursor-pointer flex flex-col justify-center items-center hover:bg-gray-100 text-sm'
             onClick={user ? handleSignOut : handleSignIn}
           >
             <Image

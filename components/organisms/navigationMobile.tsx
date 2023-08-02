@@ -10,7 +10,7 @@ export default function NavigationMobile({
   clickEvent: (r: string) => void;
 }) {
   return (
-    <div className='w-full h-screen fixed bg-white top-20 z-1 '>
+    <div className='w-full h-[calc(100vh-5rem)] overflow-hidden fixed bg-white top-20 z-1 '>
       {buttons.map(({ name, route }) => (
         <button
           key={name}
