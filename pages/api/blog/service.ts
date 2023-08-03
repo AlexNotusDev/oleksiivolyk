@@ -102,7 +102,10 @@ class BlogApiService {
     }
 
     if (searchInput) {
-      filters['OR'] = [{ title: { contains: searchInput } }, { description: { contains: searchInput } }];
+      filters['OR'] = [
+        { title: { contains: searchInput, mode: 'insensitive' } },
+        { description: { contains: searchInput, mode: 'insensitive' } },
+      ];
     }
 
     this.findManyArgs = { ...this.findManyArgs, where: filters };
