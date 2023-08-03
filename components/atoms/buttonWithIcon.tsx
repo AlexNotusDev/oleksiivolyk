@@ -19,7 +19,7 @@ export default function ButtonWithIcon({ iconUrl, styles, clickEvent, imgStyles 
 
 type ButtonWithIconProps = {
   iconUrl: string;
-  styles: string;
-  imgStyles: string;
+  styles?: string;
+  imgStyles?: string;
   clickEvent: () => void;
 };
