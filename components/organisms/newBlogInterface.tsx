@@ -11,7 +11,7 @@ import s3Client from '@/сlients/S3Client';
 import { RawDraftContentState } from 'draft-js';
 import { Blog } from '@prisma/client';
 
-const DBlogBodyEditor = dynamic(() => import('@/components/atoms/editorWysiwyg'), {
+const DBlogBodyEditor = dynamic(() => import('@/components/molecules/editorWysiwyg'), {
   ssr: false,
 });
 
