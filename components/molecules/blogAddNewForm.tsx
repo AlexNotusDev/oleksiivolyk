@@ -7,14 +7,15 @@ import TextArea from '@/components/atoms/textArea';
 import Dropzone from '@/components/atoms/imgDropzone';
 import ButtonOutlined from '@/components/atoms/buttonOutlined';
 import { useEffect, useState } from 'react';
-import { NEW_BLOG_BODY_LS_KEY, NEW_BLOG_HEADER_LS_KEY } from '@/utils/constants';
+import { BlogCategory, NEW_BLOG_BODY_LS_KEY, NEW_BLOG_HEADER_LS_KEY } from '@/utils/constants';
 import { BlogHeader } from '@/components/organisms/newBlogInterface';
+import ButtonOption from '@/components/atoms/buttonOptions';
 
 const schema = Yup.object().shape({
   img: Yup.string().required(),
   title: Yup.string().min(10).required(),
   description: Yup.string().required(),
-  category: Yup.string().oneOf(['life', 'tech']).required(),
+  category: Yup.string().oneOf([BlogCategory.LIFE, BlogCategory.TECH]).required(),
 });
 
 export default function BlogHeaderForm({ cancelEvent, submitEvent }: BlogHeaderForm) {
@@ -26,7 +27,7 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }: BlogHeaderF
     initialValues: storedValues
       ? JSON.parse(storedValues)
       : {
-          img: '',
+          schema: '',
           title: '',
           description: '',
           category: '',
@@ -73,6 +74,10 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }: BlogHeaderF
     setFieldValue('img', image);
   }
 
+  function handleChangeCategory(value: string) {
+    setFieldValue('category', value);
+  }
+
   return (
     <div className='bg-white rounded-md mb-4 drop-shadow-md p-4 mx-2'>
       <div className='flex flex-col sm:flex-row w-full sm:space-x-4 space-y-4 sm:space-y-0'>
@@ -94,30 +99,14 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }: BlogHeaderF
               changeEvent={handleChange}
               id='description'
             />
-            <div className='flex flex-row space-x-4 ml-2'>
-              <label>
-                <input
-                  type='radio'
-                  name='category'
-                  value='life'
-                  checked={values.category === 'life'}
-                  onChange={() => setFieldValue('category', 'life')}
-                  className='mr-2'
-                />
-                life
-              </label>
-              <label>
-                <input
-                  type='radio'
-                  name='category'
-                  value='tech'
-                  checked={values.category === 'tech'}
-                  onChange={() => setFieldValue('category', 'tech')}
-                  className='mr-2'
-                />
-                tech
-              </label>
-            </div>
+            <ButtonOption
+              options={[{ value: BlogCategory.LIFE }, { value: BlogCategory.TECH }]}
+              value={values.category}
+              changeEvent={handleChangeCategory}
+              wrapperStyles='space-x-2'
+              inputStyles='mr-1'
+              name='category'
+            />
           </div>
           <div className='w-full flex flex-row justify-between'>
             <p className={`text-red-700 ${!invalidSubmitAttempt && 'invisible'} font-light`}>Please feel all.</p>
