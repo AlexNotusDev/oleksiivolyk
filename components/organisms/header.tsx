@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import NavigationMobile from '@/components/organisms/navigationMobile';
 import ButtonWithIcon from '@/components/atoms/buttonWithIcon';
+import headerPhoto from '@/public/HeaderPhoto.png';
 
 export type HeaderButtons = { name: string; route: string };
 
@@ -50,10 +51,11 @@ export default function Header() {
           onClick={routeToHome}
         >
           <Image
-            src='/HeaderPhoto.png'
+            src={headerPhoto}
             className='sm:rounded-l-md'
             fill={true}
             alt='avatar'
+            placeholder='blur'
           />
         </div>
       </div>

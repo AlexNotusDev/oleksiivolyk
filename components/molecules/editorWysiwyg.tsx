@@ -6,6 +6,7 @@ import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 import { useEffect, useState } from 'react';
 import Button from '@/components/atoms/button';
 import { NEW_BLOG_BODY_LS_KEY, NEW_BLOG_HEADER_LS_KEY } from '@/utils/constants';
+import { resizeFile } from '@/utils/fileResize';
 
 const Editor = dynamic(() => import('react-draft-wysiwyg').then((mod) => mod.Editor), { ssr: false });
 
@@ -52,8 +53,14 @@ export default function BlogBodyEditor({
   }
 
   async function uploadImageCallBack(file: File): Promise<ImageLink | void> {
+    const resizedFile = await resizeFile({
+      file,
+      height: 400,
+      width: 800,
+      output: 'file',
+    });
     try {
-      return await uploadImageEvent(file);
+      return await uploadImageEvent(resizedFile as File);
     } catch (e) {
       console.log('ERROR:', e);
     }

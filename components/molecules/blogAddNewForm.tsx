@@ -27,7 +27,7 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }: BlogHeaderF
     initialValues: storedValues
       ? JSON.parse(storedValues)
       : {
-          schema: '',
+          img: '',
           title: '',
           description: '',
           category: '',
