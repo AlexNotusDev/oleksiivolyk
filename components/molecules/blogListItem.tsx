@@ -18,7 +18,7 @@ export default function BlogListItem({ id, img, title, description, createdAt }:
       onClick={handleClick}
     >
       <div className='flex flex-col w-full h-full sm:flex-row'>
-        <div className='flex-shrink-0 sm:w-60 sm:mr-4 h-60 sm:h-52 w-full relative'>
+        <div className='flex-shrink-0 sm:w-60 sm:mr-4 h-60 sm:h-52 w-full relative border-1 border-gray-200 rounded-md'>
           <Image
             alt='post-image'
             src={img}
