@@ -20,7 +20,10 @@ export default async function Blog({ params }: { params: { blogId: string } }) {
         </div>
         <Date date={createdAt} />
       </div>
-      <div dangerouslySetInnerHTML={{ __html: htmlConverted }}></div>
+      <div
+        className='py-2'
+        dangerouslySetInnerHTML={{ __html: htmlConverted }}
+      ></div>
     </div>
   );
 }
