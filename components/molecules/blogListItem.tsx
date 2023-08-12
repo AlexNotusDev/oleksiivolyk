@@ -3,9 +3,10 @@
 import Date from '@/components/atoms/date';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Blog } from '@prisma/client';
+import TagsList from '@/components/molecules/tagsList';
+import { Blog } from '@/models/blog';
 
-export default function BlogListItem({ id, img, title, description, createdAt }: Blog) {
+export default function BlogListItem({ id, img, title, description, createdAt, tags }: Blog) {
   const router = useRouter();
 
   function handleClick() {
@@ -17,8 +18,8 @@ export default function BlogListItem({ id, img, title, description, createdAt }:
       className='bg-white rounded-md mb-4 drop-shadow-lg p-4 cursor-pointer'
       onClick={handleClick}
     >
-      <div className='flex flex-col w-full h-full sm:flex-row'>
-        <div className='flex-shrink-0 sm:w-60 sm:mr-4 h-60 sm:h-52 w-full relative border-1 border-gray-200 rounded-md'>
+      <div className='flex flex-col w-full h-full md:flex-row'>
+        <div className='flex-shrink-0 md:w-52 md:mr-4 h-60 md:h-52 w-full relative border-1 border-gray-200 rounded-md'>
           <Image
             alt='post-image'
             src={img}
@@ -32,7 +33,8 @@ export default function BlogListItem({ id, img, title, description, createdAt }:
             <span className='text-lg w-full font-bold flex-grow'>{title}</span>
             <span className=''>{description}</span>
           </div>
-          <div className='flex flex-row justify-end'>
+          <div className='flex flex-row justify-between'>
+            <TagsList tags={tags} />
             <div className='ml-2'>{<Date date={createdAt} />}</div>
           </div>
         </div>

@@ -13,3 +13,8 @@ export enum BlogCategory {
   LIFE = 'life',
   ALL = 'all',
 }
+
+export enum LayoutStyle {
+  PARTICLE = 'PARTICLE',
+  UNIT = 'UNIT',
+}

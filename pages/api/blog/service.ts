@@ -8,6 +8,8 @@ import { Blog, Prisma } from '@prisma/client';
 import { RawDraftContentState } from 'draft-js';
 import prismaClient from '@/сlients/prismadbClient';
 import { getAllImagesFromROW } from '@/utils/getImageUrls';
+import { NewBlogData } from '@/models/blog';
+import { Tag } from '@/models/tag';
 
 type BlogShort = Pick<Blog, 'title' | 'body' | 'createdAt'>;
 
@@ -26,9 +28,11 @@ class BlogApiService {
     this.addOrderAndSelectArgs();
   }
 
-  public async createNewBlog(body: Blog) {
+  public async createNewBlog(body: NewBlogData) {
+    const dataWithTagsQuery = this.updateDataForTags(body);
+
     await this.dbClient?.blog.create({
-      data: body,
+      data: dataWithTagsQuery,
     });
   }
 
@@ -75,7 +79,15 @@ class BlogApiService {
   private addOrderAndSelectArgs() {
     this.findManyArgs = {
       orderBy: [{ createdAt: 'desc' }, { category: 'desc' }],
-      select: { id: true, img: true, title: true, description: true, category: true, createdAt: true },
+      select: {
+        id: true,
+        img: true,
+        title: true,
+        description: true,
+        category: true,
+        createdAt: true,
+        tags: { select: { id: true, title: true } },
+      },
     };
 
     return this;
@@ -139,6 +151,32 @@ class BlogApiService {
         await s3Client.removeS3Image(key);
       }),
     );
+  }
+
+  private updateDataForTags(newBlogBody: NewBlogData): Prisma.BlogCreateInput {
+    const { img, title, description, tags, body = '', category } = newBlogBody;
+    const newTags: Prisma.TagCreateWithoutBlogsInput[] = [];
+    const connectTags: Prisma.TagWhereUniqueInput[] = [];
+
+    tags?.forEach(({ title, id, isNew }: Tag) => {
+      if (isNew) {
+        newTags.push({ title });
+      } else {
+        connectTags.push({ id });
+      }
+    });
+
+    const tagsQuery: Prisma.BlogCreateInput = { img, title, description, body, category };
+
+    if (newTags.length) {
+      set(tagsQuery, 'create', newTags);
+    }
+
+    if (connectTags.length) {
+      set(tagsQuery, 'connect', connectTags);
+    }
+
+    return tagsQuery;
   }
 }
 

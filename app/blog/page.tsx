@@ -1,8 +1,7 @@
 'use client';
 
-import InputSearch from '@/components/atoms/InputSearch';
 import Switcher from '@/components/atoms/switcher';
-import { BlogCategory, UserRole } from '@/utils/constants';
+import { BlogCategory, LayoutStyle, UserRole } from '@/utils/constants';
 import InfiniteDataList from '@/components/templates/infiniteDataList';
 import BlogListItem from '@/components/molecules/blogListItem';
 import { useContext, useState } from 'react';
@@ -13,6 +12,9 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import ButtonWithIcon from '@/components/atoms/buttonWithIcon';
 import Button from '@/components/atoms/button';
 import { useRouter } from 'next/navigation';
+import Input from '@/components/atoms/input';
+
+const SEARCH_BLOGS_DEBOUNCE = 500;
 
 export default function Blogs() {
   const [blogQuery, setBlogQuery] = useState({});
@@ -39,8 +41,13 @@ export default function Blogs() {
 
   return (
     <div className='flex flex-col h-full sm:space-x-2 sm:flex-row'>
-      <div className='sm:flex space-x-4 sm:space-x-0 flex flex-row sm:flex-col px-2 sm:space-y-4 align-top w-full sm:w-[18%] sm:px-0 mb-4'>
-        <InputSearch inputEvent={searchInputHandler} />
+      <div className='sm:flex space-x-4 shrink-0 sm:space-x-0 flex flex-row sm:flex-col px-2 sm:space-y-4 align-top w-full sm:w-[18%] sm:min-w-[180px] sm:px-0 mb-4'>
+        <Input
+          changeEvent={searchInputHandler}
+          placeholder='Search...'
+          style={LayoutStyle.UNIT}
+          debounceMS={SEARCH_BLOGS_DEBOUNCE}
+        />
         {isMobile ? (
           <>
             <ButtonWithIcon
@@ -74,7 +81,7 @@ export default function Blogs() {
           </>
         )}
       </div>
-      <div className={`px-2 grid grid-cols-2 mb-4 gap-4 ${!isFiltersActive && 'hidden'}`}>
+      <div className={`px-2 grid grid-cols-2 mb-4 gap-4 ${!isFiltersActive && 'hidden'} z-10`}>
         <Switcher
           left={BlogCategory.TECH}
           right={BlogCategory.LIFE}

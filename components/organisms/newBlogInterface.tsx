@@ -9,7 +9,9 @@ import { NEW_BLOG_BODY_LS_KEY, NEW_BLOG_HEADER_LS_KEY } from '@/utils/constants'
 import dynamic from 'next/dynamic';
 import s3Client from '@/сlients/S3Client';
 import { RawDraftContentState } from 'draft-js';
-import { Blog } from '@prisma/client';
+import tagClient from '@/сlients/tagClient';
+import { NewBlogData } from '@/models/blog';
+import { Tag } from '@/models/tag';
 
 const DBlogBodyEditor = dynamic(() => import('@/components/molecules/editorWysiwyg'), {
   ssr: false,
@@ -29,13 +31,11 @@ enum ADDING_BLOG_STAGE {
   BODY = 'BODY',
 }
 
-export type BlogHeader = Pick<Blog, 'img' | 'title' | 'description' | 'category'>;
-export type BlogPartial = Partial<Blog>;
-
 export default function NewBlogInterface() {
   const [addingBlogStage, setAddingBlogStage] = useState<ADDING_BLOG_STAGE>(ADDING_BLOG_STAGE.HEADER);
   const [addedImages, setAddedImages] = useState<ImageShort[]>([]);
-  const [blogHeaderValues, setBlogHeaderValues] = useState<BlogPartial | null>(null);
+  const [blogHeaderValues, setBlogHeaderValues] = useState<NewBlogData | null>(null);
+  const [tags, setTags] = useState<Tag[]>([]);
   const router = useRouter();
 
   async function cancelHandler() {
@@ -46,9 +46,17 @@ export default function NewBlogInterface() {
     router.push('/blog');
   }
 
-  function submitHandler(values: BlogHeader) {
+  function submitHandler(values: NewBlogData) {
     setBlogHeaderValues(values);
     setAddingBlogStage(ADDING_BLOG_STAGE.BODY);
+  }
+
+  async function searchTagsHandler(input: string): Promise<void> {
+    try {
+      setTags(await tagClient.getTagsByPrefix(input));
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   function getBackHandler() {
@@ -71,7 +79,7 @@ export default function NewBlogInterface() {
   async function saveBlogEventHandler(RawEditorState: RawDraftContentState) {
     const updatedBlogRaw = await handleS3Images(RawEditorState);
 
-    const newBlog: BlogPartial = { ...blogHeaderValues, body: JSON.stringify(updatedBlogRaw) };
+    const newBlog = { ...blogHeaderValues, body: JSON.stringify(updatedBlogRaw) } as NewBlogData;
 
     try {
       await blogClient.createBlog(newBlog);
@@ -105,6 +113,8 @@ export default function NewBlogInterface() {
         <DBlogHeaderForm
           cancelEvent={cancelHandler}
           submitEvent={submitHandler}
+          searchTagsEvent={searchTagsHandler}
+          tags={tags}
         />
       );
     case ADDING_BLOG_STAGE.BODY:

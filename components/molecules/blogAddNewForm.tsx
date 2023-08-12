@@ -7,18 +7,32 @@ import TextArea from '@/components/atoms/textArea';
 import Dropzone from '@/components/atoms/imgDropzone';
 import ButtonOutlined from '@/components/atoms/buttonOutlined';
 import { useEffect, useState } from 'react';
-import { BlogCategory, NEW_BLOG_BODY_LS_KEY, NEW_BLOG_HEADER_LS_KEY } from '@/utils/constants';
-import { BlogHeader } from '@/components/organisms/newBlogInterface';
+import { BlogCategory, LayoutStyle, NEW_BLOG_BODY_LS_KEY, NEW_BLOG_HEADER_LS_KEY } from '@/utils/constants';
 import ButtonOption from '@/components/atoms/buttonOptions';
+import SearchSelect from '@/components/atoms/searchSelect';
+import { Shape } from '@/utils/schemaYupTs';
+import { NewBlogData } from '@/models/blog';
+import { Tag } from '@/models/tag';
 
-const schema = Yup.object().shape({
+const TAGS_MIN_LENGTH = 1;
+
+const schema = Yup.object<Shape<NewBlogData>>({
   img: Yup.string().required(),
-  title: Yup.string().min(10).required(),
+  title: Yup.string().required(),
   description: Yup.string().required(),
   category: Yup.string().oneOf([BlogCategory.LIFE, BlogCategory.TECH]).required(),
+  tags: Yup.array()
+    .of(
+      Yup.object<Shape<Tag>>({
+        id: Yup.string().required(),
+        title: Yup.string().required(),
+        isNew: Yup.boolean().optional(),
+      }),
+    )
+    .min(TAGS_MIN_LENGTH),
 });
 
-export default function BlogHeaderForm({ cancelEvent, submitEvent }: BlogHeaderForm) {
+export default function BlogHeaderForm({ cancelEvent, submitEvent, searchTagsEvent, tags }: BlogHeaderForm) {
   const [invalidSubmitAttempt, setInvalidSubmitAttempt] = useState<boolean>(false);
   const [isSaveState, setIsSaveState] = useState<boolean>(true);
 
@@ -31,6 +45,7 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }: BlogHeaderF
           title: '',
           description: '',
           category: '',
+          tags: [],
         },
     validationSchema: schema,
     onSubmit: async (values) => {
@@ -78,8 +93,20 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }: BlogHeaderF
     setFieldValue('category', value);
   }
 
+  function handleSelect(tags: Tag[]) {
+    setFieldValue('tags', tags);
+  }
+
+  function handleTagsSearch(input: string) {
+    return searchTagsEvent(input);
+  }
+
+  function handleInput(input: string) {
+    setFieldValue('title', input);
+  }
+
   return (
-    <div className='bg-white rounded-md mb-4 drop-shadow-md p-4 mx-2'>
+    <div className='bg-white rounded-md mb-4 drop-shadow-md p-4 mx-2 sm:mx-0'>
       <div className='flex flex-col sm:flex-row w-full sm:space-x-4 space-y-4 sm:space-y-0'>
         <Dropzone
           imageChangeEvent={handleImageChange}
@@ -89,8 +116,9 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }: BlogHeaderF
           <div className='flex flex-col w-full space-y-2'>
             <Input
               placeholder='Title...'
-              changeEvent={handleChange}
+              changeEvent={handleInput}
               value={values.title}
+              style={LayoutStyle.PARTICLE}
               id='title'
             />
             <TextArea
@@ -107,9 +135,17 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }: BlogHeaderF
               inputStyles='mr-1'
               name='category'
             />
+            <SearchSelect
+              options={tags}
+              placeholder='Search tags...'
+              selectEvent={handleSelect}
+              searchEvent={handleTagsSearch}
+              canAddNew={true}
+              style={LayoutStyle.PARTICLE}
+            />
           </div>
           <div className='w-full flex flex-row justify-between'>
-            <p className={`text-red-700 ${!invalidSubmitAttempt && 'invisible'} font-light`}>Please feel all.</p>
+            <p className={`text-red-700 ${!invalidSubmitAttempt && 'invisible'} font-light`}>Please fill up all.</p>
 
             <div className='flex flex-row space-x-2'>
               <>
@@ -133,5 +169,7 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent }: BlogHeaderF
 
 type BlogHeaderForm = {
   cancelEvent: () => void;
-  submitEvent: (values: BlogHeader) => void;
+  submitEvent: (values: NewBlogData) => void;
+  searchTagsEvent: (input: string) => Promise<void>;
+  tags: Tag[];
 };
