@@ -169,11 +169,11 @@ class BlogApiService {
     const tagsQuery: Prisma.BlogCreateInput = { img, title, description, body, category };
 
     if (newTags.length) {
-      set(tagsQuery, 'create', newTags);
+      set(tagsQuery, 'tags.create', newTags);
     }
 
     if (connectTags.length) {
-      set(tagsQuery, 'connect', connectTags);
+      set(tagsQuery, 'tags.connect', connectTags);
     }
 
     return tagsQuery;
