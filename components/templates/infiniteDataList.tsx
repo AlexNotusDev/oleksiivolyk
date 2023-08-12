@@ -11,6 +11,7 @@ export default function InfiniteDataList({ queryKey, ItemComponent, limit }: Inf
   );
 
   const LOADING_TEXT = 'Loading...';
+  const NO_DATA = 'Ops... The list is empty.';
   const [isInViewPort, visibleElement] = useIsInViewport<HTMLDivElement>();
 
   useEffect(() => {
@@ -37,6 +38,7 @@ export default function InfiniteDataList({ queryKey, ItemComponent, limit }: Inf
         className='text-center'
       >
         {isHasNextPage && LOADING_TEXT}
+        {!data.length && NO_DATA}
       </div>
       {!isHasNextPage && !isFetchingNextPage && data.length >= limit && (
         <div className='text-center'>{"That's all"}</div>
