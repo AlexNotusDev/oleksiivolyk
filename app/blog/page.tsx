@@ -39,6 +39,15 @@ export default function Blogs() {
     router.push('/new-blog-interface');
   }
 
+  const switcherComp = (
+    <Switcher
+      left={BlogCategory.TECH}
+      right={BlogCategory.LIFE}
+      mid={BlogCategory.ALL}
+      switchEvent={categorySwitcher}
+    />
+  );
+
   return (
     <div className='flex flex-col h-full sm:space-x-2 sm:flex-row'>
       <div className='sm:flex space-x-4 shrink-0 sm:space-x-0 flex flex-row sm:flex-col px-2 sm:space-y-4 align-top w-full sm:w-[18%] sm:min-w-[180px] sm:px-0 mb-4'>
@@ -65,12 +74,7 @@ export default function Blogs() {
           </>
         ) : (
           <>
-            <Switcher
-              left={BlogCategory.TECH}
-              right={BlogCategory.LIFE}
-              mid={BlogCategory.ALL}
-              switchEvent={categorySwitcher}
-            />
+            {switcherComp}
             {user?.role === UserRole.ADMIN && (
               <Button
                 text='Add new blog'
@@ -81,14 +85,7 @@ export default function Blogs() {
           </>
         )}
       </div>
-      <div className={`px-2 grid grid-cols-2 mb-4 gap-4 ${!isFiltersActive && 'hidden'} z-10`}>
-        <Switcher
-          left={BlogCategory.TECH}
-          right={BlogCategory.LIFE}
-          mid={BlogCategory.ALL}
-          switchEvent={categorySwitcher}
-        />
-      </div>
+      <div className={`px-2 grid grid-cols-2 mb-4 gap-4 ${!isFiltersActive && 'hidden'} z-10`}>{switcherComp}</div>
       <div className='w-full sm:w-[82%] overflow-scroll'>
         <InfiniteDataList
           ItemComponent={BlogListItem}
