@@ -69,8 +69,14 @@ export default function Header() {
             <div className='h-full flex items-center mx-2'>
               <ButtonWithIcon
                 clickEvent={mobileMenuToggle}
-                iconUrl={isMobileMenuToggle ? '/icons/close.svg' : '/icons/menu.svg'}
-                styles='h-8 w-8 border-0 filter-none'
+                iconUrl='/icons/close.svg'
+                styles={`h-8 w-8 border-0 filter-none ${!isMobileMenuToggle && 'hidden'}`}
+                imgStyles='h-8 w-8'
+              />
+              <ButtonWithIcon
+                clickEvent={mobileMenuToggle}
+                iconUrl={'/icons/menu.svg'}
+                styles={`h-8 w-8 border-0 filter-none ${isMobileMenuToggle && 'hidden'}`}
                 imgStyles='h-8 w-8'
               />
             </div>

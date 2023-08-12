@@ -48,6 +48,40 @@ export default function Blogs() {
     />
   );
 
+  const mobileInterface = (
+    <>
+      <ButtonWithIcon
+        iconUrl='/icons/filter.svg'
+        clickEvent={handleFilterClick}
+        styles={`shrink-0 ${isFiltersActive && 'filter-none'}`}
+      />
+      {user?.role === UserRole.ADMIN && (
+        <ButtonWithIcon
+          iconUrl='/icons/post_add.svg'
+          clickEvent={handleAddPostClick}
+          styles='shrink-0'
+        />
+      )}
+    </>
+  );
+
+  const desktopInterface = (
+    <>
+      {switcherComp}
+      {user?.role === UserRole.ADMIN && (
+        <Button
+          text='Add new blog'
+          styles='w-full h-8'
+          clickEvent={handleAddPostClick}
+        />
+      )}
+    </>
+  );
+
+  const mobileOnDemandFilters = (
+    <div className={`px-2 grid grid-cols-2 mb-4 gap-4 ${!isFiltersActive && 'hidden'}`}>{switcherComp}</div>
+  );
+
   return (
     <div className='flex flex-col h-full sm:space-x-2 sm:flex-row'>
       <div className='sm:flex space-x-4 shrink-0 sm:space-x-0 flex flex-row sm:flex-col px-2 sm:space-y-4 align-top w-full sm:w-[18%] sm:min-w-[180px] sm:px-0 mb-4'>
@@ -57,35 +91,9 @@ export default function Blogs() {
           style={LayoutStyle.UNIT}
           debounceMS={SEARCH_BLOGS_DEBOUNCE}
         />
-        {isMobile ? (
-          <>
-            <ButtonWithIcon
-              iconUrl='/icons/filter.svg'
-              clickEvent={handleFilterClick}
-              styles={`shrink-0 ${isFiltersActive && 'filter-none'}`}
-            />
-            {user?.role === UserRole.ADMIN && (
-              <ButtonWithIcon
-                iconUrl='/icons/post_add.svg'
-                clickEvent={handleAddPostClick}
-                styles='shrink-0'
-              />
-            )}
-          </>
-        ) : (
-          <>
-            {switcherComp}
-            {user?.role === UserRole.ADMIN && (
-              <Button
-                text='Add new blog'
-                styles='w-full h-8'
-                clickEvent={handleAddPostClick}
-              />
-            )}
-          </>
-        )}
+        {isMobile ? mobileInterface : desktopInterface}
       </div>
-      <div className={`px-2 grid grid-cols-2 mb-4 gap-4 ${!isFiltersActive && 'hidden'} z-10`}>{switcherComp}</div>
+      {mobileOnDemandFilters}
       <div className='w-full sm:w-[82%] overflow-scroll'>
         <InfiniteDataList
           ItemComponent={BlogListItem}

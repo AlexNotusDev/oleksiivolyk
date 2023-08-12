@@ -2,7 +2,6 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
-import Image from 'next/image';
 
 export default function Switcher({ left, right, mid, switchEvent }: SwitcherProps) {
   const midClasses = 'h-full w-10 bg-white cursor-pointer hover:bg-gray-100 text-gray-200';
@@ -29,63 +28,37 @@ export default function Switcher({ left, right, mid, switchEvent }: SwitcherProp
     debouncedSendRequest(switchValue);
   }
 
+  const icon = <span className='text-2xl font-extralight text-black mb-[2px]'>∞</span>;
+
+  const buttons: SwitcherButton[] = [
+    { value: left, labelStyles: `${similarLabelCss} rounded-l-md` },
+    { value: mid, isMid: true, labelStyles: `${similarLabelCss} p-1` },
+    { value: right, labelStyles: `${similarLabelCss} rounded-r-md` },
+  ];
+
   return (
     <div className='w-full h-8 flex flex-row border-collapse drop-shadow-lg divide-x divide-gray-200'>
-      <div className='inline-block basis-1/2'>
-        <input
-          onChange={change}
-          className='hidden peer'
-          type='radio'
-          id='left'
-          value={left}
-          checked={selected === left}
-        />
-        <label
-          htmlFor='left'
-          className={`${similarLabelCss} rounded-l-md`}
+      {buttons.map(({ value, labelStyles, isMid }) => (
+        <div
+          className={isMid ? midClasses : 'inline-block basis-1/2'}
+          key={value}
         >
-          {left}
-        </label>
-      </div>
-
-      <div className={midClasses}>
-        <input
-          onChange={change}
-          className='hidden peer'
-          type='radio'
-          id='mid'
-          value={mid}
-          checked={selected === mid}
-        />
-        <label
-          htmlFor='mid'
-          className={`${similarLabelCss} p-1`}
-        >
-          <Image
-            width={22}
-            height={22}
-            src='/icons/all_inclusive_FILL0_wght400_GRAD0_opsz48.svg'
-            alt='icon'
+          <input
+            onChange={change}
+            className='hidden peer'
+            type='radio'
+            id={value}
+            value={value}
+            checked={selected == value}
           />
-        </label>
-      </div>
-
-      <div className='inline-block basis-1/2'>
-        <input
-          onChange={change}
-          className='hidden peer'
-          type='radio'
-          id='right'
-          value={right}
-          checked={selected === right}
-        />
-        <label
-          htmlFor='right'
-          className={`${similarLabelCss} rounded-r-md`}
-        >
-          {right}
-        </label>
-      </div>
+          <label
+            htmlFor={value}
+            className={labelStyles}
+          >
+            {isMid ? icon : value}
+          </label>
+        </div>
+      ))}
     </div>
   );
 }
@@ -95,4 +68,10 @@ type SwitcherProps = {
   right: string;
   mid: string;
   switchEvent: (value: string) => void;
+};
+
+type SwitcherButton = {
+  value: string;
+  labelStyles: string;
+  isMid?: boolean;
 };
