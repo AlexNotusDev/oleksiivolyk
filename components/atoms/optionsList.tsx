@@ -1,6 +1,6 @@
 import { LayoutStyle } from '@/utils/constants';
 import { twMerge } from 'tailwind-merge';
-import { SelectOption } from '@/components/atoms/searchSelect';
+import { SelectOption } from '@/components/atoms/multiSelectWithSearch';
 
 export default function OptionsList({ options, clickEvent, style }: OptionsListProps) {
   const styleMap: { [key: string]: string } = {

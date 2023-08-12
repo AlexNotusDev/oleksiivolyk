@@ -11,7 +11,7 @@ import Dialog from '@/components/molecules/dialog';
 
 const MINIMUM_INPUT_LENGTH = 2;
 
-export default function SearchSelect({
+export default function MultiSelectWithSearch({
   options,
   selectEvent,
   searchEvent,

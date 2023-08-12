@@ -9,7 +9,7 @@ import ButtonOutlined from '@/components/atoms/buttonOutlined';
 import { useEffect, useState } from 'react';
 import { BlogCategory, LayoutStyle, NEW_BLOG_BODY_LS_KEY, NEW_BLOG_HEADER_LS_KEY } from '@/utils/constants';
 import ButtonOption from '@/components/atoms/buttonOptions';
-import SearchSelect from '@/components/atoms/searchSelect';
+import MultiSelectWithSearch from '@/components/atoms/multiSelectWithSearch';
 import { Shape } from '@/utils/schemaYupTs';
 import { NewBlogData } from '@/models/blog';
 import { Tag } from '@/models/tag';
@@ -135,7 +135,7 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent, searchTagsEve
               inputStyles='mr-1'
               name='category'
             />
-            <SearchSelect
+            <MultiSelectWithSearch
               options={tags}
               placeholder='Search tags...'
               selectEvent={handleSelect}

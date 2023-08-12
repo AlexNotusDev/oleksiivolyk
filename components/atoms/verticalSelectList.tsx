@@ -1,4 +1,4 @@
-import { SelectOption } from '@/components/atoms/searchSelect';
+import { SelectOption } from '@/components/atoms/multiSelectWithSearch';
 
 export default function VerticalSelectList({ options, selectEvent }: VerticalSelectListProps) {
   return (
