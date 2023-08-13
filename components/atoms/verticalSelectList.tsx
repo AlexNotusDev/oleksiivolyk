@@ -1,4 +1,4 @@
-import { SelectOption } from '@/components/atoms/multiSelectWithSearch';
+import { SelectOption } from '@/components/molecules/multiSelectWithSearch';
 
 export default function VerticalSelectList({ options, selectEvent }: VerticalSelectListProps) {
   return (

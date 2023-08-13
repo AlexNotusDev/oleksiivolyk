@@ -4,31 +4,38 @@ import Switcher from '@/components/atoms/switcher';
 import { BlogCategory, LayoutStyle, UserRole } from '@/utils/constants';
 import InfiniteDataList from '@/components/templates/infiniteDataList';
 import BlogListItem from '@/components/molecules/blogListItem';
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { UserContext } from '@/utils/userProvideComponent';
-import queryCompose from '@/utils/queryCompose';
 import { User } from '@prisma/client';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import ButtonWithIcon from '@/components/atoms/buttonWithIcon';
 import Button from '@/components/atoms/button';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Input from '@/components/atoms/input';
+import queryCompose from '@/utils/queryCompose';
 
 const SEARCH_BLOGS_DEBOUNCE = 500;
 
 export default function Blogs() {
-  const [blogQuery, setBlogQuery] = useState({});
   const [isFiltersActive, setIsFiltersActive] = useState<boolean>(false);
   const user = useContext<User | null>(UserContext);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const createQueryString = useCallback(queryCompose, [searchParams]);
+
+  function updateParams(key: string, value: string) {
+    router.push(pathname + '?' + createQueryString(key, value, searchParams));
+  }
 
   function categorySwitcher(value: string | null): void {
-    setBlogQuery({ ...blogQuery, category: value });
+    updateParams('category', value !== BlogCategory.ALL ? value : '');
   }
 
   function searchInputHandler(value: string): void {
-    setBlogQuery({ ...blogQuery, searchInput: value });
+    updateParams('searchInput', value);
   }
 
   function handleFilterClick() {
@@ -97,7 +104,7 @@ export default function Blogs() {
       <div className='w-full sm:w-[82%] overflow-scroll'>
         <InfiniteDataList
           ItemComponent={BlogListItem}
-          queryKey={`/api/blog?${queryCompose(blogQuery)}`}
+          queryKey={`/api/blog?${searchParams.toString()}`}
           limit={LIST_ITEMS_LIMIT}
         />
       </div>

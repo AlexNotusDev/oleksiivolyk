@@ -1,16 +1,26 @@
 'use client';
 
 import Date from '@/components/atoms/date';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import TagsList from '@/components/molecules/tagsList';
 import { Blog } from '@/models/blog';
+import { useCallback } from 'react';
+import queryCompose from '@/utils/queryCompose';
 
 export default function BlogListItem({ id, img, title, description, createdAt, tags }: Blog) {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const createQueryString = useCallback(queryCompose, [searchParams]);
 
   function handleClick() {
     router.push(`/blog/${id}`);
+  }
+
+  function handleItemClick(id: string) {
+    router.push(pathname + '?' + createQueryString('tag', id, searchParams));
   }
 
   return (
@@ -34,7 +44,10 @@ export default function BlogListItem({ id, img, title, description, createdAt, t
             <span className=''>{description}</span>
           </div>
           <div className='flex flex-row justify-between'>
-            <TagsList tags={tags} />
+            <TagsList
+              tags={tags}
+              itemClickEvent={handleItemClick}
+            />
             <div className='ml-2'>{<Date date={createdAt} />}</div>
           </div>
         </div>
