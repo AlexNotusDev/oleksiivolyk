@@ -2,7 +2,7 @@ import { Tag } from '@/models/tag';
 import React from 'react';
 
 export default function Tag({ tag, clickEvent }: TagProps) {
-  function handleClick(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation();
     clickEvent && clickEvent(tag.id);
   }

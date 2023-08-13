@@ -30,7 +30,7 @@ export default function Blogs() {
     router.push(pathname + '?' + createQueryString(key, value, searchParams));
   }
 
-  function categorySwitcher(value: string | null): void {
+  function categorySwitcher(value: string): void {
     updateParams('category', value !== BlogCategory.ALL ? value : '');
   }
 
@@ -104,7 +104,7 @@ export default function Blogs() {
       <div className='w-full sm:w-[82%] overflow-scroll'>
         <InfiniteDataList
           ItemComponent={BlogListItem}
-          queryKey={`/api/blog?${searchParams.toString()}`}
+          queryKey={`/api/blog?${searchParams ? searchParams.toString() : ''}`}
           limit={LIST_ITEMS_LIMIT}
         />
       </div>
