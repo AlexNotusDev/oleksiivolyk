@@ -13,11 +13,15 @@ import Button from '@/components/atoms/button';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Input from '@/components/atoms/input';
 import queryCompose from '@/utils/queryCompose';
+import SelectWithSearch from '@/components/molecules/selectWithSearch';
+import tagClient from '@/сlients/tagClient';
+import { Tag } from '@/models/tag';
 
 const SEARCH_BLOGS_DEBOUNCE = 500;
 
 export default function Blogs() {
   const [isFiltersActive, setIsFiltersActive] = useState<boolean>(false);
+  const [tags, setTags] = useState<Tag[]>([]);
   const user = useContext<User | null>(UserContext);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const router = useRouter();
@@ -46,12 +50,40 @@ export default function Blogs() {
     router.push('/new-blog-interface');
   }
 
+  async function searchTagsHandler(input: string): Promise<void> {
+    try {
+      setTags(await tagClient.getTagsByPrefix(input));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  function tagFilterHandler({ title }: Pick<Tag, 'title'>): void {
+    updateParams('tag', title);
+  }
+
+  function tagChangeHandler() {
+    updateParams('tag', '');
+  }
+
   const switcherComp = (
     <Switcher
       left={BlogCategory.TECH}
       right={BlogCategory.LIFE}
       mid={BlogCategory.ALL}
       switchEvent={categorySwitcher}
+    />
+  );
+
+  const selectWithSearch = (
+    <SelectWithSearch
+      searchEvent={searchTagsHandler}
+      options={tags}
+      value={(searchParams && searchParams.get('tag')) || ''}
+      selectEvent={tagFilterHandler}
+      changeEvent={tagChangeHandler}
+      placeholder='Search tag...'
+      valuePrefix='Tag: '
     />
   );
 
@@ -75,6 +107,7 @@ export default function Blogs() {
   const desktopInterface = (
     <>
       {switcherComp}
+      {selectWithSearch}
       {user?.role === UserRole.ADMIN && (
         <Button
           text='Add new blog'
@@ -86,7 +119,10 @@ export default function Blogs() {
   );
 
   const mobileOnDemandFilters = (
-    <div className={`px-2 grid grid-cols-2 mb-4 gap-4 ${!isFiltersActive && 'hidden'}`}>{switcherComp}</div>
+    <div className={`px-2 grid grid-cols-2 mb-4 gap-4 ${!isFiltersActive && 'hidden'}`}>
+      {switcherComp}
+      {selectWithSearch}
+    </div>
   );
 
   return (

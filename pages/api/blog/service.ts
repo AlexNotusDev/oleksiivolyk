@@ -18,6 +18,7 @@ type QueryParams = {
   page?: number;
   category?: string;
   searchInput?: string;
+  tag?: string;
 };
 
 class BlogApiService {
@@ -107,7 +108,7 @@ class BlogApiService {
     return this;
   }
 
-  private addFilterArgs({ category, searchInput }: Pick<QueryParams, 'category' | 'searchInput'>) {
+  private addFilterArgs({ category, searchInput, tag }: Pick<QueryParams, 'category' | 'searchInput' | 'tag'>) {
     const filters: Prisma.BlogWhereInput = {};
     if (category !== BlogCategory.ALL) {
       filters['category'] = category;
@@ -118,6 +119,14 @@ class BlogApiService {
         { title: { contains: searchInput, mode: 'insensitive' } },
         { description: { contains: searchInput, mode: 'insensitive' } },
       ];
+    }
+
+    if (tag) {
+      filters['tags'] = {
+        some: {
+          title: tag,
+        },
+      };
     }
 
     this.findManyArgs = { ...this.findManyArgs, where: filters };

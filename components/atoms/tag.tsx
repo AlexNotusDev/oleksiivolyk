@@ -4,7 +4,7 @@ import React from 'react';
 export default function Tag({ tag, clickEvent }: TagProps) {
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation();
-    clickEvent && clickEvent(tag.id);
+    clickEvent && clickEvent(tag);
   }
 
   return (
@@ -17,4 +17,4 @@ export default function Tag({ tag, clickEvent }: TagProps) {
   );
 }
 
-type TagProps = { tag: Tag; clickEvent?: (id: string) => void };
+type TagProps = { tag: Tag; clickEvent?: (tag: Tag) => void };

@@ -17,5 +17,5 @@ export default function TagsList({ tags, itemClickEvent }: TagsListProps) {
 
 type TagsListProps = {
   tags: Tag[];
-  itemClickEvent?: (id: string) => void;
+  itemClickEvent?: (tag: Tag) => void;
 };

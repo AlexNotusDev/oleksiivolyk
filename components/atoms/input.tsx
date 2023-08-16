@@ -5,6 +5,12 @@ import debounce from 'lodash/debounce';
 import { LayoutStyle } from '@/utils/constants';
 import { LegacyRef } from 'react';
 
+const styleMap = {
+  [LayoutStyle.UNIT]:
+    'outline-none block w-full h-8 rounded-md px-2 text-gray-900 drop-shadow-lg placeholder:text-gray-400 sm:text-sm sm:leading-6',
+  [LayoutStyle.PARTICLE]: 'bg-white h-8 border-1 border-gray-500 rounded-md px-2 w-full',
+};
+
 export default function Input({
   placeholder,
   value,
@@ -17,12 +23,6 @@ export default function Input({
   debounceMS = 0,
 }: InputProps) {
   const debouncedInput = debounce(changeEvent, debounceMS);
-
-  const styleMap = {
-    [LayoutStyle.UNIT]:
-      'outline-none block w-full h-8 rounded-md px-2 text-gray-900 drop-shadow-lg placeholder:text-gray-400 sm:text-sm sm:leading-6',
-    [LayoutStyle.PARTICLE]: 'bg-white h-8 border-1 border-gray-500 rounded-md px-2 w-full',
-  };
 
   const updStyles = twMerge(styleMap[style], styles);
 

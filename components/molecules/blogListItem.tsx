@@ -7,6 +7,7 @@ import TagsList from '@/components/molecules/tagsList';
 import { Blog } from '@/models/blog';
 import { useCallback } from 'react';
 import queryCompose from '@/utils/queryCompose';
+import { Tag } from '@/models/tag';
 
 export default function BlogListItem({ id, img, title, description, createdAt, tags }: Blog) {
   const router = useRouter();
@@ -19,8 +20,8 @@ export default function BlogListItem({ id, img, title, description, createdAt, t
     router.push(`/blog/${id}`);
   }
 
-  function handleItemClick(id: string) {
-    router.push(pathname + '?' + createQueryString('tag', id, searchParams));
+  function handleItemClick({ title }: Pick<Tag, 'title'>) {
+    router.push(pathname + '?' + createQueryString('tag', title, searchParams));
   }
 
   return (
