@@ -16,7 +16,7 @@ export default function HeaderNavigation({
   }
 
   return (
-    <div className='h-full flex flex-row'>
+    <div className='h-full flex flex-row ml-2'>
       {buttons.map(({ name, route }: HeaderButtons) => (
         <ButtonNavigation
           key={name}

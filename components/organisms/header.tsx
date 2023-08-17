@@ -14,7 +14,10 @@ import headerPhoto from '@/public/HeaderPhoto.png';
 
 export type HeaderButtons = { name: string; route: string };
 
-const headerNavButtons: HeaderButtons[] = [{ name: 'BLOG', route: '/blog' }];
+const headerNavButtons: HeaderButtons[] = [
+  { name: 'Blog', route: '/blog' },
+  { name: 'Skill', route: '/skill' },
+];
 
 export default function Header() {
   const user = useContext<User | null>(UserContext);
