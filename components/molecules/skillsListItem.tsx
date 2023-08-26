@@ -2,18 +2,28 @@
 
 import { SkillStatus, SkillWithStatus } from '@/models/skill';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function SkillsListItem({ skill }: { skill: SkillWithStatus }) {
-  const { img, title, frequencyInMonth, numberOfQuestions, status, statusMessage } = skill;
+  const { img, title, frequencyInMonths, questionsCount, status, statusMessage, id } = skill;
+  const router = useRouter();
+
+  function handleClick() {
+    router.push(`/skill/${id}`);
+  }
 
   const statusStyleMap = {
-    [SkillStatus.REFRESH_IN]: 'text-green-600',
-    [SkillStatus.REFRESH_SOON]: 'text-yellow-500',
-    [SkillStatus.NEED_REFRESH]: 'text-red-600',
+    [SkillStatus.REVISE_IN]: 'text-green-600',
+    [SkillStatus.REVISE_SOON]: 'text-yellow-500',
+    [SkillStatus.NEED_REVISE]: 'text-red-600',
+    [SkillStatus.IN_PROGRESS]: 'text-black',
   };
 
   return (
-    <div className='rounded-md drop-shadow-lg bg-white p-4 cursor-pointer flex flex-row'>
+    <div
+      className='rounded-md drop-shadow-lg bg-white p-4 cursor-pointer flex flex-row'
+      onClick={handleClick}
+    >
       <div className='w-20 h-20 rounded-full relative border-1'>
         <Image
           fill={true}
@@ -24,10 +34,10 @@ export default function SkillsListItem({ skill }: { skill: SkillWithStatus }) {
       </div>
       <div className='flex flex-col ml-4'>
         <p className='text-lg'>{title}</p>
-        <p className='text-sm text-gray-500'>{`Cycle: ${frequencyInMonth} months`}</p>
-        <p className='text-sm text-gray-500'>{`Questions: ${numberOfQuestions}`}</p>
+        <p className='text-sm text-gray-500'>{`Cycle: ${frequencyInMonths} months`}</p>
+        <p className='text-sm text-gray-500'>{`Questions: ${questionsCount}`}</p>
         <p className='text-sm text-gray-500 inline-block'>
-          Status: <span className={`text-sm ${statusStyleMap[status]}`}>{statusMessage}</span>
+          Revise: <span className={`text-sm  ${status && statusStyleMap[status]}`}>{statusMessage}</span>
         </p>
       </div>
     </div>

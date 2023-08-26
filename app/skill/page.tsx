@@ -1,85 +1,69 @@
 'use client';
 
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { User } from '@prisma/client';
 import { UserContext } from '@/utils/userProvideComponent';
 import { UserRole } from '@/utils/constants';
-import AddSkillInterface from '@/components/organisms/addSkillInterface';
+import AddSkillForm from '@/components/organisms/addSkillForm';
 import SkillsListItem from '@/components/molecules/skillsListItem';
-import { NewSkill, Skill, SkillStatus, SkillWithStatus } from '@/models/skill';
-import headerPhoto from '@/public/HeaderPhoto.png';
+import { NewSkillData, NewSkillFormData, Skill, SkillStatus, SkillWithStatus } from '@/models/skill';
+import skillClient from '@/сlients/skillClient';
+import questionProgressLSService from '@/app/skill/[skillId]/questionsProgressLSService';
+
+const DAYS_FOR_CHANGE_STATUS = 10;
+const MS_IN_DAY_NUMBER = 1000 * 60 * 60 * 24;
 
 export default function Skills() {
   const user = useContext<User | null>(UserContext);
+  const [skills, setSkills] = useState<Skill[]>([]);
 
-  const [skills, setSkills] = useState<Skill[]>([
-    {
-      id: 1,
-      title: 'JavaScript',
-      img: headerPhoto,
-      frequencyInMonth: 2,
-      numberOfQuestions: 5,
-      lastRefresh: new Date('2023-06-19'),
-    },
-    {
-      id: 2,
-      title: 'JavaScript',
-      img: headerPhoto,
-      frequencyInMonth: 2,
-      numberOfQuestions: 5,
-      lastRefresh: new Date('2023-06-17'),
-    },
-    {
-      id: 3,
-      title: 'JavaScript',
-      img: headerPhoto,
-      frequencyInMonth: 2,
-      numberOfQuestions: 5,
-      lastRefresh: new Date('2023-06-21'),
-    },
-    {
-      id: 4,
-      title: 'JavaScript',
-      img: headerPhoto,
-      frequencyInMonth: 2,
-      numberOfQuestions: 5,
-      lastRefresh: new Date('2023-07-25'),
-    },
-  ]);
+  useEffect(() => {
+    const getSkills = async () => {
+      setSkills(await skillClient.getSkills());
+    };
 
-  function handleSaveEvent(skill: NewSkill) {
-    setSkills((prev) => [...prev, skill]);
+    getSkills();
+  }, []);
+
+  async function handleSaveEvent(skillData: NewSkillFormData) {
+    const nextReviseDate = new Date();
+    nextReviseDate.setMonth(new Date().getMonth() + skillData.frequencyInMonths);
+
+    const newSkill = await skillClient.createBlog({ ...skillData, nextRevise: nextReviseDate } as NewSkillData);
+    setSkills((prevState) => prevState.concat(newSkill));
   }
 
   const generateSkillStatus = useCallback((skill: Skill): SkillWithStatus => {
     const currentDate = new Date();
-    const refreshDate = new Date();
+    const skillUpd: SkillWithStatus = { ...skill };
+    const daysDifference = Math.floor(
+      (new Date(skill.nextRevise).getTime() - currentDate.getTime()) / MS_IN_DAY_NUMBER,
+    );
 
-    const skillWithStatus: SkillWithStatus = { ...skill };
-
-    refreshDate.setMonth(skill.lastRefresh.getMonth() + skill.frequencyInMonth);
-    refreshDate.setDate(skill.lastRefresh.getDate());
-
-    const daysDifference = Math.floor((refreshDate - currentDate) / (1000 * 60 * 60 * 24));
-
-    if (daysDifference > 0) {
-      skillWithStatus.statusMessage = `Refresh in ${daysDifference} days`;
-      skillWithStatus.status = daysDifference > 10 ? SkillStatus.REFRESH_IN : SkillStatus.REFRESH_SOON;
-    } else if (daysDifference == 0) {
-      skillWithStatus.statusMessage = `Refresh today`;
-      skillWithStatus.status = SkillStatus.REFRESH_SOON;
-    } else {
-      skillWithStatus.statusMessage = `Exceeded ${Math.abs(daysDifference)} days ago`;
-      skillWithStatus.status = SkillStatus.NEED_REFRESH;
+    if (questionProgressLSService.retrieveSkillQuestionsProgress(skill.id)) {
+      skillUpd.statusMessage = 'in progress';
+      skillUpd.status = SkillStatus.IN_PROGRESS;
+      return skillUpd;
     }
 
-    return skillWithStatus;
+    if (daysDifference > 0) {
+      skillUpd.statusMessage = `in ${daysDifference} days`;
+      skillUpd.status = daysDifference > DAYS_FOR_CHANGE_STATUS ? SkillStatus.REVISE_IN : SkillStatus.REVISE_SOON;
+    } else if (daysDifference == 0) {
+      skillUpd.statusMessage = `today`;
+      skillUpd.status = SkillStatus.REVISE_SOON;
+    } else {
+      skillUpd.statusMessage = `${Math.abs(daysDifference)} days overdue`;
+      skillUpd.status = SkillStatus.NEED_REVISE;
+    }
+
+    return skillUpd;
   }, []);
 
   return (
     <div>
-      {user?.role === UserRole.ADMIN && <AddSkillInterface saveEvent={handleSaveEvent} />}
-      <div className='grid gap-4 grid-cols-1 sm:grid-cols-2 px-2 sm:px-0'>
+      {user?.role === UserRole.ADMIN && <AddSkillForm saveEvent={handleSaveEvent} />}
+      <div className='grid gap-4 grid-cols-1 sm:grid-cols-2 pb-4 overflow-scroll'>
         {skills.map((skill: Skill) => (
           <SkillsListItem
             key={skill.id}

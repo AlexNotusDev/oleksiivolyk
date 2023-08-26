@@ -61,3 +61,20 @@ model Tag {
   createdAt          DateTime @default(now())
   blogs              Blog[]
 }
+
+model Skill {
+  id                 String  @id @default(uuid())
+  title              String
+  img                String
+  frequencyInMonths  Int
+  nextRevise         DateTime
+  questions          Question[]
+}
+
+model Question {
+  id                 String  @id @default(uuid())
+  text               String
+  answer             String
+  skillId            String
+  skill              Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+}

@@ -1,4 +1,4 @@
-import { useFormik } from 'formik';
+import { FormikErrors, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import { Shape } from '@/utils/schemaYupTs';
@@ -6,38 +6,42 @@ import Input from '@/components/atoms/input';
 import Dropzone from '@/components/atoms/imgDropzone';
 import ButtonOutlined from '@/components/atoms/buttonOutlined';
 import { LayoutStyle } from '@/utils/constants';
-import { NewSkill } from '@/models/skill';
+import { NewSkillFormData } from '@/models/skill';
 
-const schema = Yup.object<Shape<NewSkill>>({
+const schema = Yup.object<Shape<NewSkillFormData>>({
   title: Yup.string().required(),
   img: Yup.string().required(),
-  frequencyInMonth: Yup.number().min(1).max(6).required(),
+  frequencyInMonths: Yup.number().min(1).max(6).required(),
 });
 
-export default function AddSkillInterface({ saveEvent }: AddSkillInterfaceProps) {
+const DEFAULT_FREQUENCY = 2;
+
+export default function AddSkillForm({ saveEvent }: AddSkillFormProps) {
   const [isShowFrom, setIsShowForm] = useState<boolean>(false);
+  const [wasSubmitAttempt, setWasSubmitAttempt] = useState(false);
   const [formErrors, setFormErrors] = useState<string[]>([]);
 
   const formik = useFormik({
     initialValues: {
       title: '',
       img: '',
-      frequencyInMonth: 2,
+      frequencyInMonths: DEFAULT_FREQUENCY,
     },
     validationSchema: schema,
-    onSubmit: async (values: NewSkill) => {
+    onSubmit: async (values: NewSkillFormData, { resetForm }) => {
       saveEvent(values);
       setIsShowForm(false);
+      resetForm();
     },
   });
 
-  const { dirty, values, handleChange, handleSubmit, validateForm, isValid, setFieldValue, errors } = formik;
+  const { dirty, values, handleChange, handleSubmit, validateForm, isValid, setFieldValue, errors, resetForm } = formik;
 
   useEffect(() => {
-    if (dirty) {
+    if (dirty && wasSubmitAttempt) {
       setFormErrors(Object.values(errors));
     }
-  }, [errors, dirty]);
+  }, [errors, dirty, wasSubmitAttempt]);
 
   function handleAddSkillClick() {
     setIsShowForm(true);
@@ -45,6 +49,7 @@ export default function AddSkillInterface({ saveEvent }: AddSkillInterfaceProps)
 
   function handleDeclineClick() {
     setIsShowForm(false);
+    resetForm();
   }
 
   function handleImageChange(image: string) {
@@ -56,11 +61,12 @@ export default function AddSkillInterface({ saveEvent }: AddSkillInterfaceProps)
   }
 
   function handleSubmitClick() {
-    validateForm().then((e) => {
+    validateForm().then((error: FormikErrors<NewSkillFormData>) => {
+      setWasSubmitAttempt(true);
       if (!isValid || !dirty) {
-        setFormErrors(Object.values(e));
+        setFormErrors(Object.values(error));
       } else {
-        handleSubmit(e);
+        handleSubmit();
       }
     });
   }
@@ -89,10 +95,10 @@ export default function AddSkillInterface({ saveEvent }: AddSkillInterfaceProps)
                 <input
                   className='inline-block mx-2 border-gray-500 border-1 p-1 rounded-md'
                   type='number'
-                  name='frequencyInMonth'
+                  name='frequencyInMonths'
                   min='1'
                   max='6'
-                  value={values.frequencyInMonth}
+                  value={values.frequencyInMonths}
                   onChange={handleChange}
                 />
                 month
@@ -111,6 +117,7 @@ export default function AddSkillInterface({ saveEvent }: AddSkillInterfaceProps)
               <ButtonOutlined
                 text='Save'
                 clickEvent={handleSubmitClick}
+                isDisabled={wasSubmitAttempt && !!formErrors.length}
               />
               <ButtonOutlined
                 text='Decline'
@@ -131,6 +138,6 @@ export default function AddSkillInterface({ saveEvent }: AddSkillInterfaceProps)
   );
 }
 
-type AddSkillInterfaceProps = {
-  saveEvent: (skill: NewSkill) => void;
+type AddSkillFormProps = {
+  saveEvent: (skill: NewSkillFormData) => void;
 };

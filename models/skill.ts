@@ -1,13 +1,17 @@
-export interface NewSkill {
+export interface NewSkillFormData {
   title: string;
   img: string;
-  frequencyInMonth: number;
+  frequencyInMonths: number;
 }
 
-export interface Skill extends NewSkill {
+export interface NewSkillData extends NewSkillFormData {
+  nextRevise: Date;
+}
+
+export interface Skill extends NewSkillData {
   id: string;
-  numberOfQuestions: number;
-  lastRefresh: Date;
+  questionsCount?: number;
+  questions?: Question[];
 }
 
 export interface SkillWithStatus extends Skill {
@@ -16,7 +20,8 @@ export interface SkillWithStatus extends Skill {
 }
 
 export enum SkillStatus {
-  NEED_REFRESH = 'NEED_REFRESH',
-  REFRESH_IN = 'REFRESH_IN',
-  REFRESH_SOON = 'REFRESH_SOON',
+  NEED_REVISE = 'NEED_REVISE',
+  REVISE_IN = 'REVISE_IN',
+  REVISE_SOON = 'REVISE_SOON',
+  IN_PROGRESS = 'IN_PROGRESS',
 }
