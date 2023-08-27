@@ -126,7 +126,7 @@ export default function Blogs() {
   );
 
   return (
-    <div className='flex flex-col h-full sm:space-x-2 sm:flex-row'>
+    <div className='flex flex-col h-full sm:space-x-2 sm:flex-row sm:px-2'>
       <div className='sm:flex space-x-4 shrink-0 sm:space-x-0 flex flex-row sm:flex-col px-2 sm:space-y-4 align-top w-full sm:w-[18%] sm:min-w-[180px] sm:px-0 mb-4'>
         <Input
           changeEvent={searchInputHandler}

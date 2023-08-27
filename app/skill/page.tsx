@@ -63,7 +63,7 @@ export default function Skills() {
   return (
     <div>
       {user?.role === UserRole.ADMIN && <AddSkillForm saveEvent={handleSaveEvent} />}
-      <div className='grid gap-4 grid-cols-1 sm:grid-cols-2 pb-4 overflow-scroll px-2 sm:px-0'>
+      <div className='grid gap-4 grid-cols-1 sm:grid-cols-2 pb-4 overflow-scroll px-2 '>
         {skills.map((skill: Skill) => (
           <SkillsListItem
             key={skill.id}

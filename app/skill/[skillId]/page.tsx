@@ -91,37 +91,39 @@ export default function Skill({ params }: { params: { skillId: string } }) {
   }
 
   return (
-    <div className='px-2 sm:px-0'>
-      <div className='drop-shadow-lg rounded-md bg-white h-16 w-full flex flex-row justify-between items-center px-2 sm:px-4'>
-        <div className='flex flex-row'>
-          <p className='text-lg border-r-1 pr-2 sm:pr-4 pt-1'>{skill?.title}</p>
-          <div className='ml-2 sm:ml-4'>
-            <p className='text-sm text-gray-500'> Questions: {skill?.questions?.length}</p>
-            <p className='text-sm text-gray-500'> Revised: {hidedQuestionIds.size}</p>
+    <div className='relative'>
+      <div className='px-2 relative'>
+        <div className='drop-shadow-lg rounded-md bg-white h-16 w-full flex flex-row justify-between items-center px-2 sm:px-4'>
+          <div className='flex flex-row'>
+            <p className='text-lg border-r-1 pr-2 sm:pr-4 pt-1'>{skill?.title}</p>
+            <div className='ml-2 sm:ml-4'>
+              <p className='text-sm text-gray-500'> Questions: {skill?.questions?.length}</p>
+              <p className='text-sm text-gray-500'> Revised: {hidedQuestionIds.size}</p>
+            </div>
           </div>
-        </div>
-        <div className='flex flex-row space-x-2'>
-          {user?.role === UserRole.ADMIN && (
-            <ButtonWithIcon
-              iconUrl={'/icons/add_circle.svg'}
-              clickEvent={showQuestionFormHandler}
-              style={LayoutStyle.PARTICLE}
-            />
-          )}
-          {hidedQuestionIds.size > 0 && (
-            <ButtonWithIcon
-              iconUrl={'/icons/remove_done.svg'}
-              clickEvent={dropProgressHandler}
-              style={LayoutStyle.PARTICLE}
-            />
-          )}
-          {user?.role === UserRole.ADMIN && skill?.questions?.length === hidedQuestionIds.size && (
-            <ButtonWithIcon
-              iconUrl={'/icons/update.svg'}
-              clickEvent={rescheduleReviseHandler}
-              style={LayoutStyle.PARTICLE}
-            />
-          )}
+          <div className='flex flex-row space-x-2'>
+            {user?.role === UserRole.ADMIN && (
+              <ButtonWithIcon
+                iconUrl={'/icons/add_circle.svg'}
+                clickEvent={showQuestionFormHandler}
+                style={LayoutStyle.PARTICLE}
+              />
+            )}
+            {hidedQuestionIds.size > 0 && (
+              <ButtonWithIcon
+                iconUrl={'/icons/remove_done.svg'}
+                clickEvent={dropProgressHandler}
+                style={LayoutStyle.PARTICLE}
+              />
+            )}
+            {user?.role === UserRole.ADMIN && skill?.questions?.length === hidedQuestionIds.size && (
+              <ButtonWithIcon
+                iconUrl={'/icons/update.svg'}
+                clickEvent={rescheduleReviseHandler}
+                style={LayoutStyle.PARTICLE}
+              />
+            )}
+          </div>
         </div>
       </div>
       {isShowQuestionForm && (
@@ -130,7 +132,7 @@ export default function Skill({ params }: { params: { skillId: string } }) {
           declineEvent={hideForm}
         />
       )}
-      <div className='space-y-4 mt-4 overflow-scroll pb-4'>
+      <div className='space-y-4 mt-4 overflow-scroll pb-4 px-2'>
         {skillWithFilteredQuestions?.questions?.map((question) => (
           <Question
             key={question.id}
