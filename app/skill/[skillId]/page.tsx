@@ -2,16 +2,16 @@
 
 import { useContext, useEffect, useMemo, useState } from 'react';
 import skillClient from '@/сlients/skillClient';
-import ButtonOutlined from '@/components/atoms/buttonOutlined';
 import { User } from '@prisma/client';
 import { UserContext } from '@/utils/userProvideComponent';
-import { UserRole } from '@/utils/constants';
+import { LayoutStyle, UserRole } from '@/utils/constants';
 import AddQuestionForm from '@/components/organisms/addQuestionForm';
 import questionClient from '@/сlients/questionClient';
 import { Skill } from '@/models/skill';
 import Question from '@/components/molecules/question';
 import { useRouter } from 'next/navigation';
 import questionProgressLSService from '@/app/skill/[skillId]/questionsProgressLSService';
+import ButtonWithIcon from '@/components/atoms/buttonWithIcon';
 
 export default function Skill({ params }: { params: { skillId: string } }) {
   const { skillId } = params;
@@ -92,34 +92,34 @@ export default function Skill({ params }: { params: { skillId: string } }) {
 
   return (
     <div className='px-2 sm:px-0'>
-      <div className='drop-shadow-lg rounded-md bg-white h-16 w-full flex flex-row justify-between items-center px-4'>
+      <div className='drop-shadow-lg rounded-md bg-white h-16 w-full flex flex-row justify-between items-center px-2 sm:px-4'>
         <div className='flex flex-row'>
-          <p className='text-lg border-r-1 pr-4 pt-1'>{skill?.title}</p>
-          <div className='ml-4'>
+          <p className='text-lg border-r-1 pr-2 sm:pr-4 pt-1'>{skill?.title}</p>
+          <div className='ml-2 sm:ml-4'>
             <p className='text-sm text-gray-500'> Questions: {skill?.questions?.length}</p>
             <p className='text-sm text-gray-500'> Revised: {hidedQuestionIds.size}</p>
           </div>
         </div>
         <div className='flex flex-row space-x-2'>
           {user?.role === UserRole.ADMIN && (
-            <ButtonOutlined
-              text='Add'
+            <ButtonWithIcon
+              iconUrl={'/icons/add_circle.svg'}
               clickEvent={showQuestionFormHandler}
-              styles='w-fit px-2'
+              style={LayoutStyle.PARTICLE}
             />
           )}
           {hidedQuestionIds.size > 0 && (
-            <ButtonOutlined
-              text='Drop progress'
+            <ButtonWithIcon
+              iconUrl={'/icons/remove_done.svg'}
               clickEvent={dropProgressHandler}
-              styles='w-fit px-2'
+              style={LayoutStyle.PARTICLE}
             />
           )}
           {user?.role === UserRole.ADMIN && skill?.questions?.length === hidedQuestionIds.size && (
-            <ButtonOutlined
-              text='Reschedule revise'
+            <ButtonWithIcon
+              iconUrl={'/icons/update.svg'}
               clickEvent={rescheduleReviseHandler}
-              styles='w-fit px-2'
+              style={LayoutStyle.PARTICLE}
             />
           )}
         </div>

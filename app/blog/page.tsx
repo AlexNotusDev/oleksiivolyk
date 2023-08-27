@@ -82,7 +82,7 @@ export default function Blogs() {
       value={(searchParams && searchParams.get('tag')) || ''}
       selectEvent={tagFilterHandler}
       changeEvent={tagChangeHandler}
-      placeholder='Search tag...'
+      placeholder='Filter by tag'
       valuePrefix='Tag: '
     />
   );

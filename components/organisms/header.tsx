@@ -64,7 +64,7 @@ export default function Header() {
       </div>
       <div className='h-full w-full flex justify-between'>
         <div className='flex flex-row'>
-          <div className='flex flex-col h-full justify-center ml-4 w-36 border-r-1 border-gray-300 '>
+          <div className='flex flex-col h-full justify-center px-2 sm:px-4 w-fit border-r-1 border-gray-300 text-sm sm:text-base'>
             <span>Oleksii Volyk</span>
             <span>Software Engineer</span>
           </div>
