@@ -9,7 +9,7 @@ export default function Tag({ tag, clickEvent }: TagProps) {
 
   return (
     <div
-      className='rounded-md bg-white border-1 border-gray-300 text-sm mx-0.5 px-2 z-20 hover:bg-gray-200'
+      className='rounded-md bg-white border-1 border-gray-300 mb-1 text-sm px-2 z-20 hover:bg-gray-100'
       onClick={handleClick}
     >
       {tag.title}

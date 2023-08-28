@@ -16,7 +16,7 @@ export type HeaderButtons = { name: string; route: string };
 
 const headerNavButtons: HeaderButtons[] = [
   { name: 'Blog', route: '/blog' },
-  { name: 'Skill', route: '/skill' },
+  { name: 'Skills', route: '/skills' },
 ];
 
 export default function Header() {

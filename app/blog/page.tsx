@@ -130,7 +130,7 @@ export default function Blogs() {
       <div className='sm:flex space-x-4 shrink-0 sm:space-x-0 flex flex-row sm:flex-col px-2 sm:space-y-4 align-top w-full sm:w-[18%] sm:min-w-[180px] sm:px-0 mb-4'>
         <Input
           changeEvent={searchInputHandler}
-          placeholder='Search...'
+          placeholder='Search'
           style={LayoutStyle.UNIT}
           debounceMS={SEARCH_BLOGS_DEBOUNCE}
         />

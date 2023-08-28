@@ -8,11 +8,13 @@ import { Blog } from '@/models/blog';
 import { useCallback } from 'react';
 import queryCompose from '@/utils/queryCompose';
 import { Tag } from '@/models/tag';
+import useMediaQuery from '@/hooks/useMediaQuery';
 
 export default function BlogListItem({ id, img, title, description, createdAt, tags }: Blog) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isMobile = useMediaQuery('(max-width: 640px)');
 
   const createQueryString = useCallback(queryCompose, [searchParams]);
 
@@ -26,7 +28,7 @@ export default function BlogListItem({ id, img, title, description, createdAt, t
 
   return (
     <div
-      className='bg-white rounded-md mb-4 drop-shadow-lg p-4 cursor-pointer'
+      className='bg-white rounded-md mb-4 drop-shadow-lg hover:scale-[100.5%] p-4 cursor-pointer'
       onClick={handleClick}
     >
       <div className='flex flex-col w-full h-full md:flex-row'>
@@ -44,12 +46,19 @@ export default function BlogListItem({ id, img, title, description, createdAt, t
             <span className='text-lg w-full font-bold flex-grow'>{title}</span>
             <span className=''>{description}</span>
           </div>
-          <div className='flex flex-row justify-between'>
+          <div className={`flex flex-row justify-between items-end ${isMobile && 'mt-1'}`}>
             <TagsList
               tags={tags}
               itemClickEvent={handleItemClick}
             />
-            <div className='ml-2'>{<Date date={createdAt} />}</div>
+            <div className='flex-shrink-0'>
+              {
+                <Date
+                  date={createdAt}
+                  mask={isMobile ? 'shortDate' : undefined}
+                />
+              }
+            </div>
           </div>
         </div>
       </div>

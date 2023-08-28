@@ -8,7 +8,7 @@ import AddSkillForm from '@/components/organisms/addSkillForm';
 import SkillsListItem from '@/components/molecules/skillsListItem';
 import { NewSkillData, NewSkillFormData, Skill, SkillStatus, SkillWithStatus } from '@/models/skill';
 import skillClient from '@/сlients/skillClient';
-import questionProgressLSService from '@/app/skill/[skillId]/questionsProgressLSService';
+import questionProgressLSService from '@/app/skills/[skillId]/questionsProgressLSService';
 
 const DAYS_FOR_CHANGE_STATUS = 10;
 const MS_IN_DAY_NUMBER = 1000 * 60 * 60 * 24;

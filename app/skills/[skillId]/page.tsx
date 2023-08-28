@@ -10,7 +10,7 @@ import questionClient from '@/сlients/questionClient';
 import { Skill } from '@/models/skill';
 import Question from '@/components/molecules/question';
 import { useRouter } from 'next/navigation';
-import questionProgressLSService from '@/app/skill/[skillId]/questionsProgressLSService';
+import questionProgressLSService from '@/app/skills/[skillId]/questionsProgressLSService';
 import ButtonWithIcon from '@/components/atoms/buttonWithIcon';
 
 export default function Skill({ params }: { params: { skillId: string } }) {
@@ -81,7 +81,7 @@ export default function Skill({ params }: { params: { skillId: string } }) {
 
     await skillClient.updateReviseDate({ nextRevise: currDate, id: skillId } as Partial<Skill>);
     questionProgressLSService.removeQuestionsProgress(skillId);
-    router.push('/skill');
+    router.push('/skills');
   }
 
   function dropProgressHandler() {

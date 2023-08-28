@@ -9,7 +9,7 @@ export default function SkillsListItem({ skill }: { skill: SkillWithStatus }) {
   const router = useRouter();
 
   function handleClick() {
-    router.push(`/skill/${id}`);
+    router.push(`/skills/${id}`);
   }
 
   const statusStyleMap = {
@@ -21,7 +21,7 @@ export default function SkillsListItem({ skill }: { skill: SkillWithStatus }) {
 
   return (
     <div
-      className='rounded-md drop-shadow-lg bg-white p-4 cursor-pointer flex flex-row'
+      className='rounded-md drop-shadow-lg bg-white p-4 cursor-pointer flex flex-row hover:scale-[101%] '
       onClick={handleClick}
     >
       <div className='w-20 h-20 rounded-full relative border-1'>
