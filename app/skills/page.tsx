@@ -63,14 +63,18 @@ export default function Skills() {
   return (
     <div>
       {user?.role === UserRole.ADMIN && <AddSkillForm saveEvent={handleSaveEvent} />}
-      <div className='grid gap-4 grid-cols-1 sm:grid-cols-2 pb-4 overflow-scroll px-2 '>
-        {skills.map((skill: Skill) => (
-          <SkillsListItem
-            key={skill.id}
-            skill={generateSkillStatus(skill)}
-          />
-        ))}
-      </div>
+      {skills.length ? (
+        <div className='grid gap-4 grid-cols-1 sm:grid-cols-2 pb-4 overflow-scroll px-2 '>
+          {skills.map((skill: Skill) => (
+            <SkillsListItem
+              key={skill.id}
+              skill={generateSkillStatus(skill)}
+            />
+          ))}
+        </div>
+      ) : (
+        <p className='text-center w-full'> Loading...</p>
+      )}
     </div>
   );
 }

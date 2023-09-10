@@ -21,6 +21,10 @@
         content: ' ';
         white-space: pre;
     }
+
+    ol {
+        @apply list-decimal list-inside
+    }
 }
 
 .editorWrap {

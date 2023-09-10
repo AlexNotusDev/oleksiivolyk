@@ -16,15 +16,15 @@ export default function Question({ question, hideEvent }: QuestionProps) {
 
   return (
     <div className='bg-white drop-shadow-lg rounded-md w-full h-fit p-4 flex flex-col items-center'>
-      <p>{question.text}</p>
+      <p className='indent-2'>{question.text}</p>
       <hr className='my-2 w-full' />
       {isShowAnswer ? (
-        <p>
+        <p className='indent-2'>
           {question.answer}
           <ButtonOutlined
             text='Hide'
             clickEvent={hideQuestionHandler}
-            styles='w-fit px-2  inline-block border-0 underline underline-offset-4'
+            styles='w-fit px-2 h-6 inline-block border-0 underline underline-offset-4'
           />
         </p>
       ) : (
