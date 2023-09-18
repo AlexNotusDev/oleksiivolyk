@@ -67,42 +67,44 @@ export default function BlogBodyEditor({
   }
 
   return (
-    <Editor
-      editorState={editorState}
-      wrapperClassName='editorWrap'
-      editorClassName='editor'
-      toolbarClassName='toolbar'
-      onEditorStateChange={onEditorStateChange}
-      toolbar={{
-        image: {
-          urlEnabled: true,
-          uploadEnabled: true,
-          uploadCallback: uploadImageCallBack,
-          previewImage: true,
-          alt: { present: false, mandatory: false },
-        },
-      }}
-      toolbarCustomButtons={[
-        <Button
-          key='1'
-          text='Save'
-          styles='bg-green-600 h-6 w-20 text-white ml-4'
-          clickEvent={saveBlog}
-        />,
-        <Button
-          key='2'
-          text='Back'
-          styles='bg-yellow-400 h-6 w-20 text-white ml-2'
-          clickEvent={getBackEvent}
-        />,
-        <Button
-          key='3'
-          text='Cancel'
-          styles='bg-red-600 h-6 w-20 text-white ml-2'
-          clickEvent={cancelHandler}
-        />,
-      ]}
-    />
+    <div className='px-2 h-full'>
+      <Editor
+        editorState={editorState}
+        wrapperClassName='editorWrap'
+        editorClassName='editor'
+        toolbarClassName='toolbar'
+        onEditorStateChange={onEditorStateChange}
+        toolbar={{
+          image: {
+            urlEnabled: true,
+            uploadEnabled: true,
+            uploadCallback: uploadImageCallBack,
+            previewImage: true,
+            alt: { present: false, mandatory: false },
+          },
+        }}
+        toolbarCustomButtons={[
+          <Button
+            key='1'
+            text='Save'
+            styles='bg-green-600 h-6 w-20 text-white ml-4'
+            clickEvent={saveBlog}
+          />,
+          <Button
+            key='2'
+            text='Back'
+            styles='bg-yellow-400 h-6 w-20 text-white ml-2'
+            clickEvent={getBackEvent}
+          />,
+          <Button
+            key='3'
+            text='Cancel'
+            styles='bg-red-600 h-6 w-20 text-white ml-2'
+            clickEvent={cancelHandler}
+          />,
+        ]}
+      />
+    </div>
   );
 }
 

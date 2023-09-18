@@ -106,7 +106,7 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent, searchTagsEve
   }
 
   return (
-    <div className='bg-white rounded-md mb-4 drop-shadow-md p-4 mx-2 sm:mx-0'>
+    <div className='bg-white rounded-md mb-4 drop-shadow-md p-4 mx-2 sm:mx-2'>
       <div className='flex flex-col sm:flex-row w-full sm:space-x-4 space-y-4 sm:space-y-0'>
         <Dropzone
           imageChangeEvent={handleImageChange}
@@ -147,18 +147,16 @@ export default function BlogHeaderForm({ cancelEvent, submitEvent, searchTagsEve
           <div className='w-full flex flex-row justify-between'>
             <p className={`text-red-700 ${!invalidSubmitAttempt && 'invisible'} font-light`}>Please fill up all.</p>
 
-            <div className='flex flex-row space-x-2'>
-              <>
-                <ButtonOutlined
-                  text='Next'
-                  isDisabled={invalidSubmitAttempt}
-                  clickEvent={handleSubmitClick}
-                />
-                <ButtonOutlined
-                  text='Decline'
-                  clickEvent={handleDeclineClick}
-                />
-              </>
+            <div className='flex flex-row space-x-2 mt-4'>
+              <ButtonOutlined
+                text='Next'
+                isDisabled={invalidSubmitAttempt}
+                clickEvent={handleSubmitClick}
+              />
+              <ButtonOutlined
+                text='Decline'
+                clickEvent={handleDeclineClick}
+              />
             </div>
           </div>
         </div>
