@@ -7,8 +7,8 @@ export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET || '',
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     }),
   ],
   pages: {
@@ -18,7 +18,7 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: 'jwt',
   },
-  secret: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET || '',
+  secret: process.env.NEXTAUTH_SECRET || '',
 };
 
 export default NextAuth(authOptions);
