@@ -13,13 +13,13 @@ import { Tag } from '@/models/tag';
 
 type BlogShort = Pick<Blog, 'title' | 'body' | 'createdAt'>;
 
-type QueryParams = {
-  limit?: number;
-  page?: number;
-  category?: string;
-  searchInput?: string;
-  tag?: string;
-};
+type QueryParams = Partial<{
+  limit: number;
+  page: number;
+  category: string;
+  searchInput: string;
+  tag: string;
+}>;
 
 class BlogApiService {
   private findManyArgs: Prisma.BlogFindManyArgs = {};
